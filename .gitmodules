@@ -1,3 +1,0 @@
-[submodule "button_handler"]
-	path = lib/button_handler
-	url = https://github.com/graffiitt/pico-button-handler.git

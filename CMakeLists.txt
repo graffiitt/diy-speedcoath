@@ -2,27 +2,51 @@ cmake_minimum_required(VERSION 3.13)
 set(PICO_BOARD pico_w)
 include(pico_sdk_import.cmake)
 
-project(gps_uart C CXX ASM)
+project(speedcoatch C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_BUILD_TYPE Release)
 pico_sdk_init()
 
-file(GLOB CPPFILE "gps_ublox/*.c")
-message("Adding ${PROJECT_NAME} C files: " )
+message("Adding ${PROJECT_NAME} CPP files: " )
+file(GLOB CPPFILE "gps_ublox/*.cpp")
+foreach(source ${CPPFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB CPPFILE "paint_lcd/*.cpp")
+foreach(source ${CPPFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB CPPFILE "button_handler/*.cpp")
+foreach(source ${CPPFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB CPPFILE "st7565/*.cpp")
 foreach(source ${CPPFILE})
     message("  - " ${source})
 endforeach(source)
 
-file(GLOB HFILE "gps_ublox/*.h")
 message("Adding ${PROJECT_NAME} H files: " )
+file(GLOB HFILE "gps_ublox/*.h")
+foreach(source ${HFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB HFILE "paint_lcd/*.h")
+foreach(source ${HFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB HFILE "button_handler/*.h")
+foreach(source ${HFILE})
+    message("  - " ${source})
+endforeach(source)
+file(GLOB HFILE "st7565/*.h")
 foreach(source ${HFILE})
     message("  - " ${source})
 endforeach(source)
 
 add_executable(${PROJECT_NAME}
-main.c
+main.cpp
 ${CPPFILE}
 ${HFILE}
 )
@@ -30,6 +54,10 @@ ${HFILE}
 target_link_libraries(${PROJECT_NAME}
 pico_stdlib
 hardware_uart
+hardware_spi
+pico_btstack_ble
+pico_btstack_cyw43
+pico_cyw43_arch_none
 )
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
