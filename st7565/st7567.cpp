@@ -7,7 +7,7 @@
 
 #include "st7567.h"
 
- uint8_t lcd_buffer[LCDWIDTH * LCDHEIGHT / LCDNUMPAGES];
+uint8_t lcd_buffer[LCDWIDTH * LCDHEIGHT / LCDNUMPAGES];
 
 void st7567_Init()
 {
@@ -43,6 +43,7 @@ void st7567_Init()
 	sendCommand(0xAF);
 
 	st7567_Clear();
+	st7567_UpdateScreen();
 }
 
 void st7567_Test()
@@ -50,9 +51,9 @@ void st7567_Test()
 	st7567_WriteString(0, 0, "123%", Font_7x10);
 	st7567_WriteString(0, 40, "123", Font_16x26); // 3 ячейка
 	st7567_WriteString(0, 16, "12", Font_11x18);
-	
+
 	// отрисовка линий раскладки на 4 ячейки
-	st7567_DrawHLine(10, BLACK); 
+	st7567_DrawHLine(10, BLACK);
 	st7567_DrawLine(63, 10, 63, 63, BLACK);
 	st7567_DrawHLine(37, BLACK);
 	st7567_DrawHLine(63, BLACK);

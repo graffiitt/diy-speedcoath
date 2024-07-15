@@ -1,44 +1,38 @@
-/**
- * Copyright (c) 2023 Raspberry Pi (Trading) Ltd.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
 #include "hardware/timer.h"
 #include "hardware/irq.h"
 #include "pico/stdlib.h"
- 
 
-
-#define ALARM_NUM_DRAW 1
-#define ALARM_IRQ_DRAW TIMER_IRQ_0
-#define TIMER_DELAY_DRAW 1000000
+#include "display_fnc/menu_display.h"
+#include "st7565/st7567.h"
+#include "button_handler/button.h"
 
 void (*drawDiplay)();
+uint8_t selectRow = 0;
+repeating_timer_t _timerDisplay;
 
-void drawDisplayIrq()
+bool drawDisplayIrq(repeating_timer_t *rt)
 {
-    hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM_DRAW);
-    timer_hw->alarm[ALARM_NUM_DRAW] = timer_hw->timerawl + TIMER_DELAY_DRAW;
-
-    if (drawDiplay)
-        drawDiplay();
+  if (drawDiplay)
+    drawDiplay();
+  st7567_DrawHLine(10, BLACK);
+  st7567_UpdateScreen();
+  st7567_Clear();
+  printf("updateDisp\n");
+  return true;
 }
 
 int main()
 {
-    stdio_init_all();
-  //  st7567_Init();
+  stdio_init_all();
+  st7567_Init();
+  buttonHandlerInit();
+  // menuSetup();
 
- 
- 
-    hw_set_bits(&timer_hw->inte, 1u << ALARM_NUM_DRAW);
-    irq_set_exclusive_handler(ALARM_IRQ_DRAW, drawDisplayIrq);
-    irq_set_enabled(ALARM_IRQ_DRAW, true);
-    timer_hw->alarm[ALARM_NUM_DRAW] = timer_hw->timerawl + TIMER_DELAY_DRAW;
+  add_repeating_timer_us(-1000000, drawDisplayIrq, NULL, &_timerDisplay);
 
-    while (1)
-    {
-    }
-    return 0;
+  printf("setup\n");
+  while (1)
+  {
+  }
+  return 0;
 }

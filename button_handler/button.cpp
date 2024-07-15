@@ -1,6 +1,7 @@
 #include "button.h"
 
 struct Button button[4];
+repeating_timer_t _timerButton;
 
 void settingButton(const Button *bt)
 {
@@ -31,7 +32,8 @@ void handlerButton(bool state, Button *bt)
     if ((state && !bt->lastState) && (deltaTime < LONG_PRESS_TIME))
     {
         printf("pressed short %d %d \n", bt->numberPin, deltaTime);
-        bt->handlerShortPress();
+        if (bt->handlerShortPress)
+            bt->handlerShortPress();
     }
     bt->lastState = state;
 }
@@ -50,11 +52,11 @@ void setButtonHandlerLong(uint8_t numButton, void (*fncHandler)())
     button[numButton].handlerLongPress = fncHandler;
 }
 
-void alarmIrq()
+bool alarmIrq(repeating_timer_t *rt)
 {
     // set timer for next irq
-    hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM);
-    timer_hw->alarm[ALARM_NUM] = timer_hw->timerawl + TIMER_DELAY;
+    // hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM);
+    // timer_hw->alarm[ALARM_NUM] = timer_hw->timerawl + TIMER_DELAY;
 
     bool state[] = {
         gpio_get(BUTTON_1),
@@ -64,9 +66,10 @@ void alarmIrq()
     };
 
     if (3 > (state[0] + state[1] + state[2] + state[3]))
-        return;
+        return true;
 
     handlerButton(state[0], &button[0]);
+    return true;
 }
 
 void buttonHandlerInit()
@@ -81,8 +84,5 @@ void buttonHandlerInit()
         settingButton(&button[i]);
     }
 
-    hw_set_bits(&timer_hw->inte, 1u << ALARM_NUM);
-    irq_set_exclusive_handler(ALARM_IRQ, alarmIrq);
-    irq_set_enabled(ALARM_IRQ, true);
-    timer_hw->alarm[ALARM_NUM] = timer_hw->timerawl + TIMER_DELAY;
+    add_repeating_timer_us(-1000000 / 5, alarmIrq, NULL, &_timerButton);
 }
