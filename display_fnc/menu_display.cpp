@@ -14,15 +14,23 @@ void menuSetup()
     menuItems.push_back(ItemObject());
     menuItems[3].text = "memory";
 
+    menuButtonHandler();
     drawDiplay = &menuDisplayDraw;
 }
 
-void menuSelectButton(){
+void menuSelectButton()
+{
+    setButtonHandlerShort(0, nullptr);
 
+    for (int i = menuItems.size(); 0 < i; i--)
+    {
+        menuItems.pop_back();
+    }
 }
 
 void menuButtonHandler()
 {
+    setButtonHandlerShort(0, menuSelectButton);
     setButtonHandlerShort(1, buttonUpList);
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(1, nullptr);
@@ -31,6 +39,6 @@ void menuButtonHandler()
 
 void menuDisplayDraw()
 {
-    st7567_WriteString(0, 0, "menu", Font_7x10);
+    st7567_WriteString(44, 0, "menu", Font_7x10);
     drawList(&menuItems);
 }

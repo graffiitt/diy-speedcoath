@@ -17,7 +17,6 @@ bool drawDisplayIrq(repeating_timer_t *rt)
   st7567_DrawHLine(10, BLACK);
   st7567_UpdateScreen();
   st7567_Clear();
-  printf("updateDisp\n");
   return true;
 }
 
@@ -26,11 +25,10 @@ int main()
   stdio_init_all();
   st7567_Init();
   buttonHandlerInit();
-  // menuSetup();
+  menuSetup();
 
   add_repeating_timer_us(-1000000, drawDisplayIrq, NULL, &_timerDisplay);
 
-  printf("setup\n");
   while (1)
   {
   }

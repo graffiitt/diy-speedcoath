@@ -67,8 +67,8 @@ bool alarmIrq(repeating_timer_t *rt)
 
     if (3 > (state[0] + state[1] + state[2] + state[3]))
         return true;
-
-    handlerButton(state[0], &button[0]);
+    for (int i = 0; i < 4; i++)
+        handlerButton(state[i], &button[i]);
     return true;
 }
 
