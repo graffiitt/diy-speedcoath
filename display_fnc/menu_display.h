@@ -3,7 +3,6 @@
 
 #include "display_functions.h"
 
-extern void (*drawDiplay)();
 
 void menuSetup();
 

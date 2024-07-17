@@ -6,16 +6,19 @@
 #include <string>
 #include <vector>
 
+#define NUM_DISPLAY_ROWS 4
+
+extern void updateDisp();
 extern uint8_t selectRow;
 extern void (*drawDiplay)();
 
-struct ItemObject
+struct ItemObjectList
 {
     std::string text;
     void (*setupDisplay)(void);
  };
 
-void drawList(std::vector<ItemObject> *items);
+void drawList(std::vector<ItemObjectList> *items);
 void drawTime(struct Time *tm);
 void buttonUpList();
 void buttonDownList();

@@ -13,9 +13,7 @@
 #define BUTTON_4 9
 
 #define LONG_PRESS_TIME 3000000 // 3 sec
-#define TIMER_DELAY 250000  // 250 ms
-#define ALARM_NUM 0
-#define ALARM_IRQ TIMER_IRQ_0
+#define REQUEST_HZ 10           // 250 ms
 
 struct Button
 {
@@ -31,7 +29,7 @@ void settingButton(const Button *bt);
 void handlerButton(bool state, Button *bt);
 void setButtonHandlerShort(uint8_t numButton, void (*fncHandler)());
 void setButtonHandlerLong(uint8_t numButton, void (*fncHandler)());
-bool alarmIrq(repeating_timer_t *rt);
+bool buttonIrq(repeating_timer_t *rt);
 void buttonHandlerInit();
 
 #endif
