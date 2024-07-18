@@ -3,6 +3,7 @@
 #include "pico/stdlib.h"
 
 #include "display_fnc/menu_display.h"
+#include "display_fnc/data_display.h"
 #include "st7565/st7567.h"
 #include "button_handler/button.h"
 
@@ -32,8 +33,15 @@ int main()
   st7567_Init();
   buttonHandlerInit();
 
+  st7567_WriteString(30, 20, "GR", Font_16x26);
+  st7567_UpdateScreen();
+  st7567_Clear();
+
   sleep_ms(1000);
+
   menuSetup();
+  updateDisp();
+  dataDisplayInit();
 
   add_repeating_timer_us(-1000000, drawDisplayIrq, NULL, &_timerDisplay);
 

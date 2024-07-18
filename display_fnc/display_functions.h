@@ -16,10 +16,17 @@ struct ItemObjectList
 {
     std::string text;
     void (*setupDisplay)(void);
- };
+};
 
-void drawList(std::vector<ItemObjectList> *items);
+struct ItemObjectData
+{
+    std::string text;
+    void (*drawItem)(const int, const int);
+};
+
+void drawList(const std::vector<ItemObjectList> *items);
 void drawTime(struct Time *tm);
+
 void buttonUpList();
 void buttonDownList();
 

@@ -1,6 +1,6 @@
 #include "display_functions.h"
 
-void drawList(std::vector<ItemObjectList> *items)
+void drawList(const std::vector<ItemObjectList> *items)
 {
     uint8_t x = 7;
     uint8_t y = 16;
@@ -13,14 +13,11 @@ void drawList(std::vector<ItemObjectList> *items)
         selectRow = items->size() - 1;
     }
 
-    printf("row num %d  size %d \n", selectRow, items->size());
     for (uint8_t i = 0; i < NUM_DISPLAY_ROWS; i++)
     {
         int item = selectRow > (NUM_DISPLAY_ROWS - 1) ? (selectRow - NUM_DISPLAY_ROWS + 1) + i : i;
-        printf("%d ", item);
         if (item < items->size())
         {
-            printf(" item print %d %s\n", item, items->at(item).text.c_str());
             st7567_WriteString(x, y, items->at(item).text.c_str(), Font_7x10);
             y += 12;
         }
@@ -28,6 +25,7 @@ void drawList(std::vector<ItemObjectList> *items)
     y = 16 + 12 * (selectRow > (NUM_DISPLAY_ROWS - 1) ? (NUM_DISPLAY_ROWS - 1) : selectRow);
     st7567_WriteCharBuf(0, y, '>', Font_7x10);
 }
+
 
 void drawTime(Time *tm)
 {

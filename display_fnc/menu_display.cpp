@@ -1,5 +1,6 @@
 #include "menu_display.h"
 #include "settings_display.h"
+#include "data_display.h"
 
 std::vector<ItemObjectList> menuItems;
 
@@ -7,6 +8,8 @@ void menuSetup()
 {
     menuItems.push_back(ItemObjectList());
     menuItems[0].text = "display";
+    menuItems[0].setupDisplay = &dataDisplaySetup;
+    
     menuItems.push_back(ItemObjectList());
     menuItems[1].text = "train";
 
@@ -19,7 +22,7 @@ void menuSetup()
 
     menuItems.push_back(ItemObjectList());
     menuItems[4].text = "qwe";
-    
+
     menuItems.push_back(ItemObjectList());
     menuItems[5].text = "eer";
 
@@ -30,6 +33,7 @@ void menuSetup()
 void menuSelectButton()
 {
     menuItems[selectRow].setupDisplay();
+    selectRow = 0;
     // clear vector
     for (int i = menuItems.size(); 0 < i; i--)
     {

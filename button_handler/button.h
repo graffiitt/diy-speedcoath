@@ -12,8 +12,9 @@
 #define BUTTON_3 8
 #define BUTTON_4 9
 
-#define LONG_PRESS_TIME 3000000 // 3 sec
-#define REQUEST_HZ 10           // 250 ms
+#define LONG_PRESS_TIME 5000000 // 3 sec
+#define REQUEST_HZ 500000           // 250 ms
+#define COUNTER_LONG_PRESS 10
 
 struct Button
 {
@@ -22,6 +23,7 @@ struct Button
     bool flag;
     int numberPin;
     bool lastState;
+    uint32_t counterPress;
     uint32_t timePress; // timestamp when button was pressed
 };
 

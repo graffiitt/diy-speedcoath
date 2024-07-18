@@ -46,25 +46,30 @@ bool buttonIrq(repeating_timer_t *rt)
 
 void handlerButton(bool state, Button *bt)
 {
-    uint32_t deltaTime = time_us_32() - bt->timePress;
+   // uint32_t deltaTime = time_us_32() - bt->timePress;
+    printf("st: %d lt: %d\n", state, bt->lastState);
+  
+    if (!state)
+        bt->counterPress++;
 
-    if (!state && bt->lastState) // fix pressed
+    if ((!state) && bt->lastState) // fix pressed
     {
+        bt->counterPress = 0;
         bt->flag = 1;
-        printf("pressed %d %d \n", bt->numberPin, time_us_32());
-        bt->timePress = time_us_32();
+        printf("pressed %d %d \n", bt->numberPin, bt->counterPress);
+      //  bt->timePress = time_us_32();
     }
     if (!(state && bt->lastState) &&
-        (deltaTime > LONG_PRESS_TIME) && bt->flag)
+        (bt->counterPress > COUNTER_LONG_PRESS) && bt->flag)
     {
         bt->flag = 0;
-        printf("pressed long %d %d \n", bt->numberPin, deltaTime);
+        printf("pressed long %d %d \n", bt->numberPin, bt->counterPress);
         if (bt->handlerLongPress)
             bt->handlerLongPress();
     }
-    if ((state && !bt->lastState) && (deltaTime < LONG_PRESS_TIME))
+    if ((state && !bt->lastState) && (bt->counterPress < COUNTER_LONG_PRESS))
     {
-        printf("pressed short %d %d \n", bt->numberPin, deltaTime);
+        printf("pressed short %d %d \n", bt->numberPin, bt->counterPress);
         if (bt->handlerShortPress)
             bt->handlerShortPress();
     }
@@ -83,5 +88,5 @@ void buttonHandlerInit()
         settingButton(&button[i]);
     }
 
-    add_repeating_timer_us(-1000000 / REQUEST_HZ, buttonIrq, NULL, &_timerButton);
+    add_repeating_timer_us(-REQUEST_HZ, buttonIrq, NULL, &_timerButton);
 }

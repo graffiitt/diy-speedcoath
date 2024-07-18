@@ -8,6 +8,10 @@ void settingsSetup()
     settingsItems.push_back(ItemObjectList());
     settingsItems[0].text = "bluetooth";
 
+    settingsItems.push_back(ItemObjectList());
+    settingsItems[1].text = "data display";
+    settingsItems[1].setupDisplay = &setupDataDispSetup;
+
     settingsButtonsSetup();
     drawDiplay = &settingsDrawDisplay;
 }
@@ -28,20 +32,28 @@ void settingsClearVector()
 
 void settingsButtonsSetup()
 {
-    setButtonHandlerShort(0, nullptr);
+    setButtonHandlerShort(0, settingsSelectButton);
     setButtonHandlerLong(0, nullptr);
     setButtonHandlerShort(1, buttonUpList);
     setButtonHandlerLong(1, nullptr);
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, nullptr);
     setButtonHandlerShort(3, settingsBackButton);
-   // setButtonHandlerLong(3, nullptr);
+    // setButtonHandlerLong(3, nullptr);
 }
 
 void settingsBackButton()
 {
     menuSetup();
-    settingsClearVector();
     selectRow = 2;
+    settingsClearVector();
+    updateDisp();
+}
+
+void settingsSelectButton()
+{
+    settingsItems[selectRow].setupDisplay();
+    selectRow = 0;
+    settingsClearVector();
     updateDisp();
 }
