@@ -12,9 +12,8 @@
 #define BUTTON_3 8
 #define BUTTON_4 9
 
-#define LONG_PRESS_TIME 5000000 // 3 sec
-#define REQUEST_HZ 500000           // 250 ms
-#define COUNTER_LONG_PRESS 10
+ #define REQUEST_HZ 150000           // 250 ms
+#define COUNTER_LONG_PRESS 20
 
 struct Button
 {

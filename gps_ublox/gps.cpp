@@ -3,10 +3,12 @@
 static const uint8_t set5hz[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A}; //(5Hz)
 
 struct Position pos;
+struct Time time;
 
 void gps_init()
 {
-    sleep_ms(1000);
+    uart_configure();
+    sleep_ms(500);
     uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
 }
 
@@ -45,21 +47,26 @@ void parse_RMC(uint8_t *data)
                 case TIME_RMC:
                 {
                     char ch[] = {buff[0], buff[1]};
-                    pos.time.hours = atoi(ch);
+                    time.hours = atoi(ch);
+                    time.hours = time.hours > 20 ? time.hours - 17 : time.hours + 3;
                     ch[0] = buff[2];
                     ch[1] = buff[3];
-                    pos.time.minutes = atoi(ch);
+                    time.minutes = atoi(ch);
                     ch[0] = buff[4];
                     ch[1] = buff[5];
-                    pos.time.seconds = atoi(ch);
+                    time.seconds = atoi(ch);
                     break;
                 }
                 case STATUS_RMC:
                 {
                     if (buff[0] == 'A')
+                    {
                         pos.status = 1;
+                    }
                     else
+                    {
                         pos.status = 0;
+                    }
                     break;
                 }
                 case LATITUDE_RMC:

@@ -15,7 +15,6 @@
 
 struct Time
 {
-    uint8_t status;
     uint8_t hours;
     uint8_t minutes;
     uint8_t seconds;
@@ -27,7 +26,6 @@ struct Position
     double latitude;
     double longtitude;
     double speed;
-    struct Time time;
 };
 
 void gps_init();

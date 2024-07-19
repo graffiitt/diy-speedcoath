@@ -43,8 +43,11 @@ void setupDataDispBackButton()
 
 void setupDataDispUpButton()
 {
-    if (selectRow < 1)
+    if (selectRow < NUM_DATA_ITEMS - 1)
         selectRow++;
+    else
+        selectRow = 0;
+
     updateDisp();
 }
 
@@ -52,13 +55,17 @@ void setupDataDispDownButton()
 {
     if (selectRow > 0)
         selectRow--;
+    else
+        selectRow = NUM_DATA_ITEMS - 1;
     updateDisp();
 }
 
 void setupDataDispChangeUpButton()
 {
-    if (bufState[selectRow] < NUM_DISPLAY_ROWS - 1)
+    if (bufState[selectRow] < NUM_DATA_ITEMS - 1)
         bufState[selectRow]++;
+    else
+        bufState[selectRow] = 0;
     updateDisp();
 }
 
@@ -66,10 +73,14 @@ void setupDataDispChangeDownButton()
 {
     if (bufState[selectRow] > 0)
         bufState[selectRow]--;
+    else
+        bufState[selectRow] = NUM_DATA_ITEMS - 1;
     updateDisp();
 }
 
 void setupDataDispApplyBotton()
 {
     memcpy(dataItemsSelect, bufState, 4);
+    st7567_WriteString(110, 0, "wr", Font_7x10);
+    updateDisp();
 }

@@ -1,15 +1,17 @@
 #include "data_display.h"
 #include "menu_display.h"
+#include "gps_ublox/gps.h"
 
 struct ItemObjectData dataItems[NUM_DATA_ITEMS];
 int8_t dataItemsSelect[4] = {0, 1, 0, 0};
+extern struct Time time;
 
 void dataDisplayInit()
 {
     dataItems[0].text = "pulse";
     dataItems[0].drawItem = &drawPulseItem;
 
-    dataItems[1].text = "stroce rate";
+    dataItems[1].text = "stroke rate";
     dataItems[1].drawItem = &drawStroceRate;
 }
 
@@ -33,12 +35,18 @@ void dataDisplayButtonSetup()
 
 void dataDisplayDraw()
 {
-    st7567_WriteString(0, 0, "disp", Font_7x10);
+    char str[10];
+     
+        sprintf(str, "%02d:%02d:%02d", time.hours , time.minutes, time.seconds);
+     
+   // sprintf(str, "--:--:--");
+     
+    st7567_WriteString(0, 0, str , Font_7x10);
 
     dataItems[dataItemsSelect[0]].drawItem(0, 11);
-    dataItems[dataItemsSelect[1]].drawItem(63, 11);
-    // dataItems[dataItemsSelect[0]].drawItem(0, 11);
-    // dataItems[dataItemsSelect[0]].drawItem(0, 11);
+    dataItems[dataItemsSelect[1]].drawItem(64, 11);
+    // dataItems[dataItemsSelect[2]].drawItem(0, 11);
+    // dataItems[dataItemsSelect[3]].drawItem(64, 11);
 
     // draw lines
     st7567_DrawLine(63, 10, 63, 63, BLACK);
@@ -55,10 +63,14 @@ void dataDisplayBackButton()
 
 void drawPulseItem(const int x, const int y)
 {
+
     st7567_WriteString(x, y + 2, "123", Font_16x26);
+    st7567_WriteString(x + 48, y + 15, "hr", Font_7x10);
 }
 
 void drawStroceRate(const int x, const int y)
 {
-    st7567_WriteString(x, y + 2, "11", Font_16x26);
+
+    st7567_WriteString(x + 3, y + 2, "--", Font_16x26);
+    st7567_WriteString(x + 39, y + 15, "s/m", Font_7x10);
 }

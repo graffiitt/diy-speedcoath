@@ -6,6 +6,7 @@
 #include "display_fnc/data_display.h"
 #include "st7565/st7567.h"
 #include "button_handler/button.h"
+#include "gps_ublox/gps.h"
 
 void (*drawDiplay)();
 uint8_t selectRow = 0;
@@ -31,9 +32,10 @@ int main()
 {
   stdio_init_all();
   st7567_Init();
+  gps_init();
   buttonHandlerInit();
 
-  st7567_WriteString(30, 20, "GR", Font_16x26);
+  st7567_WriteString(35, 20, "GR", Font_16x26);
   st7567_UpdateScreen();
   st7567_Clear();
 

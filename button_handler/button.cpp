@@ -47,7 +47,7 @@ bool buttonIrq(repeating_timer_t *rt)
 void handlerButton(bool state, Button *bt)
 {
    // uint32_t deltaTime = time_us_32() - bt->timePress;
-    printf("st: %d lt: %d\n", state, bt->lastState);
+    printf("pin: %d st: %d lt: %d\n",  bt->numberPin, state, bt->lastState);
   
     if (!state)
         bt->counterPress++;
