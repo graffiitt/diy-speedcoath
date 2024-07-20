@@ -29,7 +29,7 @@ struct Position
 };
 
 void gps_init();
-
+bool checkCRC(const uint8_t *str);
 void nmea_parcer(uint8_t *str);
 void parse_RMC(uint8_t *data);
 void parse_VTG(uint8_t *data);

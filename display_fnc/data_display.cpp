@@ -3,7 +3,7 @@
 #include "gps_ublox/gps.h"
 
 struct ItemObjectData dataItems[NUM_DATA_ITEMS];
-int8_t dataItemsSelect[4] = {0, 1, 0, 0};
+int8_t dataItemsSelect[4] = {0, 1, 2, 0};
 extern struct Time time;
 
 void dataDisplayInit()
@@ -13,6 +13,9 @@ void dataDisplayInit()
 
     dataItems[1].text = "stroke rate";
     dataItems[1].drawItem = &drawStroceRate;
+
+    dataItems[2].text = "stroke count";
+    dataItems[2].drawItem = &drawCounterStroke;
 }
 
 void dataDisplaySetup()
@@ -36,17 +39,13 @@ void dataDisplayButtonSetup()
 void dataDisplayDraw()
 {
     char str[10];
-     
-        sprintf(str, "%02d:%02d:%02d", time.hours , time.minutes, time.seconds);
-     
-   // sprintf(str, "--:--:--");
-     
-    st7567_WriteString(0, 0, str , Font_7x10);
+    sprintf(str, "%02d:%02d:%02d", time.hours, time.minutes, time.seconds);
+    st7567_WriteString(35, 0, str, Font_7x10);
 
     dataItems[dataItemsSelect[0]].drawItem(0, 11);
     dataItems[dataItemsSelect[1]].drawItem(64, 11);
-    // dataItems[dataItemsSelect[2]].drawItem(0, 11);
-    // dataItems[dataItemsSelect[3]].drawItem(64, 11);
+    dataItems[dataItemsSelect[2]].drawItem(0, 37);
+    // dataItems[dataItemsSelect[3]].drawItem(64, 37);
 
     // draw lines
     st7567_DrawLine(63, 10, 63, 63, BLACK);
@@ -73,4 +72,11 @@ void drawStroceRate(const int x, const int y)
 
     st7567_WriteString(x + 3, y + 2, "--", Font_16x26);
     st7567_WriteString(x + 39, y + 15, "s/m", Font_7x10);
+}
+
+void drawCounterStroke(const int x, const int y)
+{
+    char str[5];
+    sprintf(str, "%05d", 1);
+    st7567_WriteString(x + 4, y + 6, str, Font_11x18);
 }

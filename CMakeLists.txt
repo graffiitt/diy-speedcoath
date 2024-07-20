@@ -10,13 +10,13 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 message("Adding ${PROJECT_NAME} CPP files: " )
-file(GLOB CPPFILE "*/*.cpp")
+file(GLOB CPPFILE "display_fnc/*.cpp")
 foreach(source ${CPPFILE})
     message("  - " ${source})
 endforeach(source)
  
 message("Adding ${PROJECT_NAME} H files: " )
-file(GLOB HFILE "*/*.h")
+file(GLOB HFILE "display_fnc/*.h")
 foreach(source ${HFILE})
     message("  - " ${source})
 endforeach(source)
@@ -28,14 +28,16 @@ ${CPPFILE}
 ${HFILE}
 )
 
+add_subdirectory(button_handler)
+add_subdirectory(gps_ublox)
+add_subdirectory(st7565)
+
 target_link_libraries(${PROJECT_NAME}
-pico_stdlib
-hardware_uart
-hardware_spi
-pico_btstack_ble
-pico_btstack_cyw43
-pico_cyw43_arch_none
+button_handler
+gps_ublox
+st7565
 )
+
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     )

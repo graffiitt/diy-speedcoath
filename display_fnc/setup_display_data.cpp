@@ -20,6 +20,9 @@ void setupDataDispDrawDisplay()
     st7567_WriteString(7, 16, str.c_str(), Font_7x10);
     str = "2: " + dataItems[bufState[1]].text;
     st7567_WriteString(7, 16 + 12, str.c_str(), Font_7x10);
+    str = "3: " + dataItems[bufState[2]].text;
+    st7567_WriteString(7, 16 + 12*2, str.c_str(), Font_7x10);
+
     st7567_WriteCharBuf(0, 16 + 12 * selectRow, '>', Font_7x10);
 }
 

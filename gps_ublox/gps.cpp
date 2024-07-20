@@ -8,12 +8,34 @@ struct Time time;
 void gps_init()
 {
     uart_configure();
-    sleep_ms(500);
+    sleep_ms(1000);
     uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
+}
+
+bool checkCRC(const uint8_t *str)
+{
+    uint8_t lenght = strlen((const char *)str);
+    //printf("%c%c%c%c\n", str[lenght - 6], str[lenght - 5], str[lenght - 4], str[lenght - 3] );
+    if (lenght < 8) return 0;
+    if (str[0] != '$' || str[lenght - 5] != '*')
+        return 0;
+
+    uint8_t checksum = 0;
+    for (uint8_t i = 1; i < (lenght - 5); i++)
+    {
+        checksum ^= str[i];
+    }
+    char crc[] = {str[lenght - 4], str[lenght - 3]};
+    int crcMSG = (int)strtol(crc, NULL, 16);
+    if (crcMSG == checksum)
+        return 1;
+    return 0;
 }
 
 void nmea_parcer(uint8_t *str)
 {
+    if (!checkCRC(str))
+        return;
     if (strstr((char *)str, "RMC") != NULL)
     {
         parse_RMC(str);
@@ -33,10 +55,10 @@ void parse_RMC(uint8_t *data)
     uint8_t count_ch = 0;
     uint8_t num = 0;
     uint8_t i = 0;
-    char buff[10];
-    memset(buff, '\0', 10);
+    char buff[14];
+    memset(buff, '\0', 14);
 
-    while (data[count_ch - 1] != '*')
+    while (data[count_ch - 1] != '\n')
     {
         if (data[count_ch] == ',' || data[count_ch] == '*')
         {
@@ -48,7 +70,7 @@ void parse_RMC(uint8_t *data)
                 {
                     char ch[] = {buff[0], buff[1]};
                     time.hours = atoi(ch);
-                    time.hours = time.hours > 20 ? time.hours - 17 : time.hours + 3;
+                    time.hours = time.hours > 20 ? time.hours - 21 : time.hours + 3;
                     ch[0] = buff[2];
                     ch[1] = buff[3];
                     time.minutes = atoi(ch);
@@ -110,7 +132,7 @@ void parse_RMC(uint8_t *data)
             }
             i = 0;
             num++;
-            memset(buff, '\0', 10);
+            memset(buff, '\0', 14);
         }
         if (data[count_ch] != ',')
         {
@@ -129,7 +151,7 @@ void parse_VTG(uint8_t *data)
     char buff[10];
     memset(buff, '\0', 10);
 
-    while (data[count_ch - 1] != '*')
+    while (data[count_ch - 1] != '\n')
     {
 
         if (data[count_ch] == ',' || data[count_ch] == '*')
