@@ -25,7 +25,6 @@ struct ItemObjectData
 };
 
 void drawList(const std::vector<ItemObjectList> *items);
-void drawTime(struct Time *tm);
 
 void buttonUpList();
 void buttonDownList();

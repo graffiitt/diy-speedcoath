@@ -26,11 +26,6 @@ void drawList(const std::vector<ItemObjectList> *items)
     st7567_WriteCharBuf(0, y, '>', Font_7x10);
 }
 
-
-void drawTime(Time *tm)
-{
-}
-
 void buttonUpList()
 {
     selectRow++;

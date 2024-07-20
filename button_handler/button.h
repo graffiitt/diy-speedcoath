@@ -27,7 +27,7 @@ struct Button
 };
 
 void settingButton(const Button *bt);
-void handlerButton(bool state, Button *bt);
+void handlerButton(const bool state, Button *bt);
 void setButtonHandlerShort(uint8_t numButton, void (*fncHandler)());
 void setButtonHandlerLong(uint8_t numButton, void (*fncHandler)());
 bool buttonIrq(repeating_timer_t *rt);

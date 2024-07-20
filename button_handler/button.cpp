@@ -44,7 +44,7 @@ bool buttonIrq(repeating_timer_t *rt)
     return true;
 }
 
-void handlerButton(bool state, Button *bt)
+void handlerButton(const bool state, Button *bt)
 {
     if (!state)
         bt->counterPress++;

@@ -9,14 +9,14 @@ void gps_init()
 {
     uart_configure();
     sleep_ms(1000);
-    uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
+    //uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
 }
 
 bool checkCRC(const uint8_t *str)
 {
     uint8_t lenght = strlen((const char *)str);
-    //printf("%c%c%c%c\n", str[lenght - 6], str[lenght - 5], str[lenght - 4], str[lenght - 3] );
-    if (lenght < 8) return 0;
+    if (lenght < 8)
+        return 0;
     if (str[0] != '$' || str[lenght - 5] != '*')
         return 0;
 
@@ -44,10 +44,6 @@ void nmea_parcer(uint8_t *str)
     {
         parse_VTG(str);
     }
-
-    // printf("hr:%d mn:%d sec:%d ", pos.time.hours, pos.time.minutes, pos.time.seconds);
-    // printf("long %f lat %f ", pos.longtitude, pos.latitude);
-    // printf("speed %f \n", pos.speed);
 }
 
 void parse_RMC(uint8_t *data)
@@ -128,7 +124,6 @@ void parse_RMC(uint8_t *data)
                     }
                     break;
                 }
-                // printf("num %d:%s;\n", num, buff);
             }
             i = 0;
             num++;
@@ -169,7 +164,6 @@ void parse_VTG(uint8_t *data)
                     break;
                 }
                 }
-                // printf("num %d:%s;\n", num, buff);
             }
             i = 0;
             num++;

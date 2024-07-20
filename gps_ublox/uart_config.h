@@ -21,7 +21,6 @@
 #define FIFO_SIZE 80
 
 void uart_configure();
-void uart_handle();
 
 void async_worker_func(async_context_t *async_context, async_when_pending_worker_t *worker);
 void pio_irq_func(void);
