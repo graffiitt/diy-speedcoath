@@ -8,7 +8,6 @@
 #include "button_handler/button.h"
 #include "gps_ublox/gps.h"
 
-
 void (*drawDiplay)();
 uint8_t selectRow = 0;
 repeating_timer_t _timerDisplay;
@@ -33,13 +32,14 @@ int main()
 {
   stdio_init_all();
   st7567_Init();
-  gps_init();
   buttonHandlerInit();
 
-  st7567_WriteString(35, 20, "GR", Font_16x26);
+  st7567_WriteString(35, 20, "GRAFFIT", FontStyle_veranda_18);
+
   st7567_UpdateScreen();
   st7567_Clear();
 
+  gps_init();
   sleep_ms(1000);
 
   menuSetup();

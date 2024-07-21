@@ -11,9 +11,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pico/stdlib.h"
-#include "spi.h"
-#include "fonts.h"
 
+#include "spi.h"
+#include "fontlibrary.h"
 
 #define ST7567A_RST_Pin 21
 #define ST7567A_CS_Pin 1
@@ -76,14 +76,12 @@ void st7567_Test();
 void st7567_DrawHLine(uint8_t y, uint8_t color);
 void st7567_DrawWLine(uint8_t x, uint8_t color);
 void st7567_DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t color);
-void st7567_WriteString(uint8_t x, uint8_t y, const char *str, FontDef font);
-void st7567_WriteChar(uint8_t x, uint8_t y, char ch, FontDef font);
-void st7567_PrintWithDelimetr(uint8_t num1, uint8_t num2, uint8_t widthDelim);
-
+void st7567_WriteString(uint8_t x, uint8_t y, const char *str, fontStyle_t font);
+void st7567_WriteChar(uint8_t x, uint8_t y, char ch, fontStyle_t font);
+ 
 void st7567_Clear();
 
 void st7567_SetPixelBuffer(uint8_t x, uint8_t y, uint8_t color);
-void st7567_WriteCharBuf(uint8_t x, uint8_t y, char ch, FontDef font);
 void st7567_UpdateScreen();
 void sendData(uint8_t *data, uint16_t size);
 void sendDataSingle(uint8_t data);

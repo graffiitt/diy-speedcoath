@@ -1,7 +1,7 @@
 #ifndef DATA_DISPLAY_H_
 #define DATA_DISPLAY_H_
 
-#define NUM_DATA_ITEMS 3
+#define NUM_DATA_ITEMS 4
 
 #include "display_functions.h"
 
@@ -14,5 +14,6 @@ void dataDisplayBackButton();
 void drawPulseItem(const int x, const int y);
 void drawStroceRate(const int x, const int y);
 void drawCounterStroke(const int x, const int y);
+void drawSplit(const int x, const int y);
 
 #endif

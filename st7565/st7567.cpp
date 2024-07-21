@@ -7,7 +7,7 @@
 
 #include "st7567.h"
 
-uint8_t lcd_buffer[LCDWIDTH * LCDHEIGHT / LCDNUMPAGES];
+static uint8_t lcd_buffer[LCDWIDTH * LCDHEIGHT / LCDNUMPAGES];
 
 void st7567_Init()
 {
@@ -43,14 +43,13 @@ void st7567_Init()
 	sendCommand(0xAF);
 
 	st7567_Clear();
-	st7567_UpdateScreen();
 }
 
 void st7567_Test()
 {
-	st7567_WriteString(0, 0, "123%", Font_7x10);
-	st7567_WriteString(0, 40, "123", Font_16x26); // 3 ячейка
-	st7567_WriteString(0, 16, "12", Font_11x18);
+	st7567_WriteString(0, 0, "123:12 asid", FontStyle_veranda_9); // 3 ячейка
+	st7567_WriteString(0, 11, "123", FontStyle_veranda_18);
+	st7567_WriteString(0, 37, "123", FontStyle_veranda_26);
 
 	// отрисовка линий раскладки на 4 ячейки
 	st7567_DrawHLine(10, BLACK);
@@ -121,36 +120,15 @@ void st7567_DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t col
 	// st7567_UpdateScreen();
 }
 
-void st7567_WriteString(uint8_t x, uint8_t y, const char *str, FontDef font)
+void st7567_WriteString(uint8_t x, uint8_t y, const char *str, fontStyle_t font)
 {
 	while (*str)
 	{
-		if (x + font.width >= LCDWIDTH)
-		{
-			x = 0;
-			y += font.height;
-			if (*str == ' ')
-			{
-				// skip spaces in the beginning of the new line
-				str++;
-				continue;
-			}
-		}
-		st7567_WriteCharBuf(x, y, *str, font);
-		x += font.width;
+		st7567_WriteChar(x, y, *str, font);
+		x += font.GlyphWidth[(int)*str - font.FirstAsciiCode];
 		str++;
 	}
 	// st7567_UpdateScreen();
-}
-
-void st7567_WriteChar(uint8_t x, uint8_t y, char ch, FontDef font)
-{
-	st7567_WriteCharBuf(x, y, ch, font);
-	// st7567_UpdateScreen();
-}
-
-void st7567_PrintWithDelimetr(uint8_t num1, uint8_t num2, uint8_t widthDelim)
-{
 }
 
 void st7567_Clear()
@@ -171,21 +149,42 @@ void st7567_SetPixelBuffer(uint8_t x, uint8_t y, uint8_t color)
 		lcd_buffer[x + (y / 8) * 128] &= ~(1 << (y % 8));
 }
 
-void st7567_WriteCharBuf(uint8_t x, uint8_t y, char ch, FontDef font)
+void st7567_WriteChar(uint8_t x, uint8_t y, char ch, fontStyle_t font)
 {
-	uint32_t b;
-	for (uint8_t i = 0; i < font.height; i++)
+	uint32_t chr;
+	if (ch < font.FirstAsciiCode)
 	{
-		b = font.data[(ch - 32) * font.height + i];
-		for (uint8_t j = 0; j < font.width; j++)
+		ch = 0;
+	}
+	else
+	{
+		ch -= font.FirstAsciiCode;
+	}
+	for (uint32_t j = 0; j < font.GlyphHeight; ++j)
+	{
+		uint8_t width = font.GlyphWidth[(int)ch];
+
+		for (uint32_t w = 0; w < font.GlyphBytesWidth; ++w)
 		{
-			if ((b << j) & 0x8000)
+			chr = font.GlyphBitmaps[(ch * font.GlyphHeight + j) * font.GlyphBytesWidth + w];
+
+			uint8_t w_range = width;
+			if (w_range >= 8)
 			{
-				st7567_SetPixelBuffer(x + j, y + i, BLACK);
+				w_range = 8;
+				width -= 8;
 			}
-			else
+
+			for (uint32_t i = 0; i < w_range; ++i)
 			{
-				st7567_SetPixelBuffer(x + j, y + i, WHITE);
+				if ((chr << i) & 0x80)
+				{
+					st7567_SetPixelBuffer(x + i + w * 8, y + j, BLACK);
+				}
+				else
+				{
+					st7567_SetPixelBuffer(x + i + w * 8, y + j, WHITE);
+				}
 			}
 		}
 	}

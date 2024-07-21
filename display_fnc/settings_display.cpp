@@ -18,7 +18,7 @@ void settingsSetup()
 
 void settingsDrawDisplay()
 {
-    st7567_WriteString(0, 0, "settings", Font_7x10);
+    st7567_WriteString(0, 0, "settings", FontStyle_veranda_9);
     drawList(&settingsItems);
 }
 

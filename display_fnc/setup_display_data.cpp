@@ -15,15 +15,16 @@ void setupDataDispSetup()
 void setupDataDispDrawDisplay()
 {
     std::string str;
-    st7567_WriteString(0, 0, "data display", Font_7x10);
+    st7567_WriteString(0, 0, "data display", FontStyle_veranda_9);
     str = "1: " + dataItems[bufState[0]].text;
-    st7567_WriteString(7, 16, str.c_str(), Font_7x10);
+    st7567_WriteString(7, 16, str.c_str(), FontStyle_veranda_9);
     str = "2: " + dataItems[bufState[1]].text;
-    st7567_WriteString(7, 16 + 12, str.c_str(), Font_7x10);
+    st7567_WriteString(7, 16 + 12, str.c_str(), FontStyle_veranda_9);
     str = "3: " + dataItems[bufState[2]].text;
-    st7567_WriteString(7, 16 + 12*2, str.c_str(), Font_7x10);
-
-    st7567_WriteCharBuf(0, 16 + 12 * selectRow, '>', Font_7x10);
+    st7567_WriteString(7, 16 + 12 * 2, str.c_str(), FontStyle_veranda_9);
+    str = "4: " + dataItems[bufState[3]].text;
+    st7567_WriteString(7, 16 + 12 * 3, str.c_str(), FontStyle_veranda_9);
+    st7567_WriteChar(0, 16 + 12 * selectRow, '>', FontStyle_veranda_9);
 }
 
 void setupDataDispButtonsSetup()
@@ -84,6 +85,6 @@ void setupDataDispChangeDownButton()
 void setupDataDispApplyBotton()
 {
     memcpy(dataItemsSelect, bufState, 4);
-    st7567_WriteString(110, 0, "wr", Font_7x10);
+    st7567_WriteString(110, 0, "wr", FontStyle_veranda_9);
     updateDisp();
 }

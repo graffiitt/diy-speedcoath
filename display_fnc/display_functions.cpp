@@ -18,12 +18,12 @@ void drawList(const std::vector<ItemObjectList> *items)
         int item = selectRow > (NUM_DISPLAY_ROWS - 1) ? (selectRow - NUM_DISPLAY_ROWS + 1) + i : i;
         if (item < items->size())
         {
-            st7567_WriteString(x, y, items->at(item).text.c_str(), Font_7x10);
+            st7567_WriteString(x, y, items->at(item).text.c_str(), FontStyle_veranda_9);
             y += 12;
         }
     }
     y = 16 + 12 * (selectRow > (NUM_DISPLAY_ROWS - 1) ? (NUM_DISPLAY_ROWS - 1) : selectRow);
-    st7567_WriteCharBuf(0, y, '>', Font_7x10);
+    st7567_WriteChar(0, y, '>', FontStyle_veranda_9);
 }
 
 void buttonUpList()

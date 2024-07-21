@@ -56,6 +56,6 @@ void menuButtonHandler()
 
 void menuDisplayDraw()
 {
-    st7567_WriteString(0, 0, "menu", Font_7x10);
+    st7567_WriteString(0, 0, "menu", FontStyle_veranda_9);
     drawList(&menuItems);
 }
