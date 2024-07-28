@@ -3,7 +3,7 @@
 struct Button button[4];
 repeating_timer_t _timerButton;
 
-void settingButton(const Button *bt)
+void settingButton(const struct Button *bt)
 {
     gpio_init(bt->numberPin);
     gpio_set_dir(bt->numberPin, GPIO_IN);
@@ -44,7 +44,7 @@ bool buttonIrq(repeating_timer_t *rt)
     return true;
 }
 
-void handlerButton(const bool state, Button *bt)
+void handlerButton(const bool state, struct Button *bt)
 {
     if (!state)
         bt->counterPress++;

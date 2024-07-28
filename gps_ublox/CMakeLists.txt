@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.8)
 project(gps_ublox)
 
-message("Adding ${PROJECT_NAME} CPP files: " )
-file(GLOB CPPFILE "*.cpp")
+message("Adding ${PROJECT_NAME} C files: " )
+file(GLOB CPPFILE "*.c")
 foreach(source ${CPPFILE})
     message("  - " ${source})
 endforeach(source)

@@ -7,9 +7,13 @@ struct Time time;
 
 void gps_init()
 {
+    gpio_init(4);
+    gpio_set_dir(4, GPIO_OUT);
+    gpio_put(4, 1);
+
     uart_configure();
-    sleep_ms(1000);
-    //uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
+    // sleep_ms(1000);
+    // uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
 }
 
 bool checkCRC(const uint8_t *str)
@@ -83,6 +87,7 @@ void parse_RMC(uint8_t *data)
                     }
                     else
                     {
+                        pos.speed = 0;
                         pos.status = 0;
                     }
                     break;

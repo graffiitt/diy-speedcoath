@@ -26,8 +26,8 @@ struct Button
     uint32_t timePress; // timestamp when button was pressed
 };
 
-void settingButton(const Button *bt);
-void handlerButton(const bool state, Button *bt);
+void settingButton(const struct Button *bt);
+void handlerButton(const bool state, struct Button *bt);
 void setButtonHandlerShort(uint8_t numButton, void (*fncHandler)());
 void setButtonHandlerLong(uint8_t numButton, void (*fncHandler)());
 bool buttonIrq(repeating_timer_t *rt);

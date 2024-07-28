@@ -1,16 +1,17 @@
 cmake_minimum_required(VERSION 3.13)
-set(PICO_BOARD pico_w)
+set(PICO_BOARD pico_w CACHE STRING "Board type")
 include(pico_sdk_import.cmake)
 
 project(speedcoatch C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
 pico_sdk_init()
 
-message("Adding ${PROJECT_NAME} CPP files: " )
-file(GLOB CPPFILE "display_fnc/*.cpp")
+message("Adding ${PROJECT_NAME} C files: " )
+file(GLOB CPPFILE "display_fnc/*.c")
 foreach(source ${CPPFILE})
     message("  - " ${source})
 endforeach(source)
@@ -23,11 +24,12 @@ endforeach(source)
  
 
 add_executable(${PROJECT_NAME}
-main.cpp
+main.c
 ${CPPFILE}
 ${HFILE}
 )
 
+add_subdirectory(bluetooth)
 add_subdirectory(button_handler)
 add_subdirectory(gps_ublox)
 add_subdirectory(st7565)
@@ -36,6 +38,7 @@ target_link_libraries(${PROJECT_NAME}
 button_handler
 gps_ublox
 st7565
+ble_tools
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

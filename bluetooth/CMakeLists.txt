@@ -1,7 +1,7 @@
-cmake_minimum_required (VERSION 3.8)
-project(st7565)
+cmake_minimum_required (VERSION 3.10)
+project(ble_tools)
 
-message("Adding ${PROJECT_NAME} C files: " )
+message("Adding ${PROJECT_NAME} CPP files: " )
 file(GLOB CPPFILE "*.c")
 foreach(source ${CPPFILE})
     message("  - " ${source})
@@ -18,10 +18,12 @@ add_library(${PROJECT_NAME} STATIC
 ${CPPFILE}
 ${HFILE}
 )
-
+ 
 target_link_libraries(${PROJECT_NAME}
 pico_stdlib
-hardware_spi
+#pico_btstack_classic
+pico_btstack_ble
+pico_btstack_cyw43
+pico_cyw43_arch_none
 )
-
  

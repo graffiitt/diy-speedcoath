@@ -1,24 +1,25 @@
 #include "display_functions.h"
 
-void drawList(const std::vector<ItemObjectList> *items)
+void drawList(cvector(struct ItemObjectList) * items)
 {
     uint8_t x = 7;
     uint8_t y = 16;
 
-    if (items->empty())
+    if (cvector_size(*items) == 0)
         return;
 
-    if (selectRow > items->size()-1)
+    if (selectRow > cvector_size(*items) - 1)
     {
-        selectRow = items->size() - 1;
+        selectRow = cvector_size(*items) - 1;
     }
 
     for (uint8_t i = 0; i < NUM_DISPLAY_ROWS; i++)
     {
         int item = selectRow > (NUM_DISPLAY_ROWS - 1) ? (selectRow - NUM_DISPLAY_ROWS + 1) + i : i;
-        if (item < items->size())
+        if (item < cvector_size(*items))
         {
-            st7567_WriteString(x, y, items->at(item).text.c_str(), FontStyle_veranda_9);
+            printf("st:%s\n", cvector_at(*items, i)->text);
+            st7567_WriteString(x, y, cvector_at(*items, i)->text, FontStyle_veranda_9);
             y += 12;
         }
     }

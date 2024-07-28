@@ -1,0 +1,92 @@
+{
+	"folders": [
+		{
+			"name": "diy-speedcoath",
+			"path": "."
+		},
+		{
+			"name": "pico-examples",
+			"path": "../pico-examples"
+		},
+		{
+			"name": "gps ublox n8m",
+			"path": "../gps ublox n8m"
+		},
+		{
+			"name": "bluetooth search",
+			"path": "../bluetooth search"
+		},
+		{
+			"name": "bluetooth heart rate client",
+			"path": "../bluetooth heart rate client"
+		},
+		{
+			"name": "bluetooth hrt client 2",
+			"path": "../bluetooth hrt client 2"
+		},
+		{
+			"path": "../../c-vector"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"menu_lcd.h": "c",
+			"drawfunctions.h": "c",
+			"st7567.h": "c",
+			"cstdint": "cpp",
+			"string": "cpp",
+			"string_view": "c",
+			"algorithm": "cpp",
+			"array": "c",
+			"atomic": "c",
+			"bit": "c",
+			"*.tcc": "c",
+			"cctype": "c",
+			"clocale": "c",
+			"cmath": "c",
+			"compare": "c",
+			"concepts": "c",
+			"cstdarg": "c",
+			"cstddef": "c",
+			"cstdio": "c",
+			"cstdlib": "c",
+			"cwchar": "c",
+			"cwctype": "c",
+			"deque": "c",
+			"set": "c",
+			"unordered_map": "c",
+			"vector": "c",
+			"exception": "c",
+			"functional": "c",
+			"iterator": "c",
+			"memory": "c",
+			"memory_resource": "c",
+			"numeric": "c",
+			"optional": "c",
+			"random": "c",
+			"system_error": "c",
+			"tuple": "c",
+			"type_traits": "c",
+			"utility": "c",
+			"initializer_list": "c",
+			"iosfwd": "c",
+			"limits": "c",
+			"new": "c",
+			"numbers": "c",
+			"ostream": "c",
+			"stdexcept": "c",
+			"streambuf": "c",
+			"cinttypes": "c",
+			"typeinfo": "c",
+			"stdbool.h": "c",
+			"stdint.h": "c",
+			"st7567a.h": "c",
+			"spi.h": "c",
+			"inttypes.h": "c",
+			"stdlib.h": "c",
+			"cstring": "cpp",
+			"menu_display.h": "c",
+			"display_functions.h": "c"
+		}
+	}
+}

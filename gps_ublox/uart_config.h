@@ -1,9 +1,8 @@
 #ifndef UART_CONFIG_H
 #define UART_CONFIG_H
 
-#include <string.h>
 #include <stdio.h>
-
+#include <string.h>
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 #include "pico/util/queue.h"

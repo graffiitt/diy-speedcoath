@@ -3,7 +3,6 @@
 #include "pico/stdlib.h"
 
 #include "display_fnc/menu_display.h"
-#include "display_fnc/data_display.h"
 #include "st7565/st7567.h"
 #include "button_handler/button.h"
 #include "gps_ublox/gps.h"
@@ -30,7 +29,10 @@ bool drawDisplayIrq(repeating_timer_t *rt)
 
 int main()
 {
+
+  timer_hw->dbgpause = 0x2;
   stdio_init_all();
+
   st7567_Init();
   buttonHandlerInit();
 
@@ -44,7 +46,12 @@ int main()
 
   menuSetup();
   updateDisp();
-  dataDisplayInit();
+  // dataDisplayInit();
+
+  gpio_deinit(5);
+  gpio_init(5);
+  gpio_set_dir(5, GPIO_OUT);
+  gpio_put(5, 1);
 
   add_repeating_timer_us(-1000000, drawDisplayIrq, NULL, &_timerDisplay);
 

@@ -3,8 +3,8 @@
 
 #include "st7565/st7567.h"
 #include "button_handler/button.h"
-#include <string>
-#include <vector>
+#include <string.h>
+#include "../cvector.h"
 
 #define NUM_DISPLAY_ROWS 4
 
@@ -14,17 +14,17 @@ extern void (*drawDiplay)();
 
 struct ItemObjectList
 {
-    std::string text;
+    char *text;
     void (*setupDisplay)(void);
 };
 
 struct ItemObjectData
 {
-    std::string text;
+    char *text;
     void (*drawItem)(const int, const int);
 };
 
-void drawList(const std::vector<ItemObjectList> *items);
+void drawList(cvector(struct ItemObjectList) * items);
 
 void buttonUpList();
 void buttonDownList();

@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/Users/vlad/programming/pico/pico-sdk",
-                "/Users/vlad/programming/pico/pico-sdk/src/rp2_common/hardware_irq/include"
+                "/Users/vlad/programming/pico/pico-sdk/src/rp2_common/hardware_irq/include",
+                "/Users/vlad/programming/pico/pico-sdk/src/host/hardware_timer/include"
             ],
             "defines": [],
             "macFrameworkPath": [
