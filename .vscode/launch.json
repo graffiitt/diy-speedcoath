@@ -4,7 +4,7 @@
         {
             "name": "Pico Debug (Cortex-Debug)",
             "cwd": "${workspaceRoot}",
-            "executable": "${command:raspberry-pi-pico.launchTargetPath}",
+            "executable": "${command:cmake.launchTargetPath}",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",

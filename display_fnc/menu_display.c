@@ -1,18 +1,21 @@
 #include "menu_display.h"
-#include "display_functions.h"
 
-// std::vector<ItemObjectList> menuItems;
+
+
 cvector(struct ItemObjectList) menuItems = NULL;
 
 char *menuText[] = {
     "display",
     "settings"};
 
+extern void settingsSetup();
+extern void dataDisplaySetup();
+
 void menuSetup()
 {
-    struct ItemObjectList str1 = {menuText[0], 0};
+    struct ItemObjectList str1 = {menuText[0], &dataDisplaySetup};
     cvector_push_back(menuItems, str1);
-    struct ItemObjectList str2 = {menuText[1], 0};
+    struct ItemObjectList str2 = {menuText[1], &settingsSetup};
     cvector_push_back(menuItems, str2);
 
     menuButtonHandler();
@@ -33,9 +36,8 @@ void menuButtonHandler()
 
 void menuSelectButton()
 {
-    // menuItems[selectRow].setupDisplay();
+    cvector_at(menuItems, selectRow)->setupDisplay();
     selectRow = 0;
-
     // clear vector
     for (int i = cvector_size(menuItems); 0 < i; i--)
     {

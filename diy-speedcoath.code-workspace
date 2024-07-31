@@ -86,7 +86,10 @@
 			"stdlib.h": "c",
 			"cstring": "cpp",
 			"menu_display.h": "c",
-			"display_functions.h": "c"
+			"display_functions.h": "c",
+			"data_display.h": "c",
+			"settings_display.h": "c",
+			"gps.h": "c"
 		}
 	}
 }
