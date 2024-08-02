@@ -7,6 +7,7 @@
 #include "../cvector.h"
 
 #define NUM_DISPLAY_ROWS 4
+#define NUM_DATA_ITEMS 4
 
 extern void updateDisp();
 extern uint8_t selectRow;
@@ -20,7 +21,7 @@ struct ItemObjectList
 
 struct ItemObjectData
 {
-    char *text;
+    char *text; // for select current data item
     void (*drawItem)(const int, const int);
 };
 

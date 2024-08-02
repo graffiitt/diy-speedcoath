@@ -1,5 +1,4 @@
 #include "settings_display.h"
- 
 
 cvector(struct ItemObjectList) settingsItems = NULL;
 
@@ -7,11 +6,12 @@ char *settingsText[] = {
     "bluetooth",
     "items display"};
 
+extern void setupDispItemsSetup();
 void settingsSetup()
 {
     struct ItemObjectList str1 = {settingsText[0], 0};
     cvector_push_back(settingsItems, str1);
-    struct ItemObjectList str2 = {settingsText[1], 0};
+    struct ItemObjectList str2 = {settingsText[1], setupDispItemsSetup};
     cvector_push_back(settingsItems, str2);
 
     settingsButtonHandler();
@@ -27,29 +27,30 @@ void settingsButtonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, settingsBackButton);
-   // setButtonHandlerLong(3, 0);
 }
 
 void settingsSelectButton()
 {
     cvector_at(settingsItems, selectRow)->setupDisplay();
-    selectRow = 0;
     for (int i = cvector_size(settingsItems); 0 < i; i--)
     {
         cvector_pop_back(settingsItems);
     }
+
+    selectRow = 0;
     updateDisp();
 }
 
 extern void menuSetup();
 void settingsBackButton()
 {
-    menuSetup();
-    selectRow = 1;
     for (int i = cvector_size(settingsItems); 0 < i; i--)
     {
         cvector_pop_back(settingsItems);
     }
+    menuSetup();
+    selectRow = 1;
+    updateDisp();
 }
 
 void settingsDisplayDraw()

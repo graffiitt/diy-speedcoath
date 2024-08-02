@@ -1,7 +1,5 @@
 #include "menu_display.h"
 
-
-
 cvector(struct ItemObjectList) menuItems = NULL;
 
 char *menuText[] = {
@@ -31,18 +29,17 @@ void menuButtonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, 0);
-    setButtonHandlerLong(3, 0);
 }
 
 void menuSelectButton()
 {
     cvector_at(menuItems, selectRow)->setupDisplay();
-    selectRow = 0;
     // clear vector
     for (int i = cvector_size(menuItems); 0 < i; i--)
     {
         cvector_pop_back(menuItems);
     }
+    selectRow = 0;
     updateDisp();
 }
 
