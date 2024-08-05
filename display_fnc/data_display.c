@@ -16,8 +16,12 @@ uint8_t currentDataItem[] = {0, 1, 2, 3};
 struct ItemObjectData dataItems[NUM_DATA_ITEMS];
 repeating_timer_t _timerDisplay;
 
+extern struct Time time;
+extern struct Position pos;
+
 bool drawDisplayIrq(repeating_timer_t *rt)
 {
+    printf("update screen \n");
     updateDisp();
     return true;
 }
@@ -79,9 +83,12 @@ void initDataDisp()
     dataItems[3].drawItem = &drawSplitItem;
 }
 
+extern uint16_t heart_rate;
 void drawPulseItem(const int x, const int y)
 {
-    st7567_WriteString(x, y + 4, "123", FontStyle_veranda_26);
+    char str[5];
+    sprintf(str, "%03d", (int)heart_rate);
+    st7567_WriteString(x, y + 4, str, FontStyle_veranda_26);
     st7567_WriteString(x + 51, y + 15, "hr", FontStyle_veranda_9);
 }
 
@@ -109,8 +116,8 @@ void drawSplitItem(const int x, const int y)
         sec = modf(30 / pos.speed, &min);
     else
         sec = min = 0;
-    sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
-    st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
+    //sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
+   // st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
 }
 
 uint8_t bufState[] = {0, 0, 0, 0};

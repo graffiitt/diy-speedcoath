@@ -25,7 +25,7 @@
 			"path": "../bluetooth hrt client 2"
 		},
 		{
-			"path": "../../c-vector"
+			"path": "../../kalman-filter-master"
 		}
 	],
 	"settings": {
@@ -89,7 +89,10 @@
 			"display_functions.h": "c",
 			"data_display.h": "c",
 			"settings_display.h": "c",
-			"gps.h": "c"
-		}
+			"gps.h": "c",
+			"ble_diplay.h": "c",
+			"ble_client.h": "c"
+		},
+		"cortex-debug.variableUseNaturalFormat": true
 	}
 }

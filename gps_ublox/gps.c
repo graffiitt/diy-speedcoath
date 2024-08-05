@@ -7,10 +7,6 @@ struct Time time;
 
 void gps_init()
 {
-    gpio_init(4);
-    gpio_set_dir(4, GPIO_OUT);
-    gpio_put(4, 1);
-
     uart_configure();
     // sleep_ms(1000);
     // uart_write_blocking(UART_ID, set5hz, sizeof set5hz);

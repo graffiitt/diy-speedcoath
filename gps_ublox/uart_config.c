@@ -21,12 +21,12 @@ void uart_configure()
     queue_init(&fifo, 1, FIFO_SIZE);
     if (!async_context_threadsafe_background_init_with_defaults(&async_context))
     {
-      //  printf("failed to setup context\n");
+        //  printf("failed to setup context\n");
     }
     async_context_add_when_pending_worker(&async_context.core, &worker);
     if (!init_pio(&uart_rx_program, &pio, &sm, &offset))
     {
-      //  printf("failed to setup pio\n");
+        //  printf("failed to setup pio\n");
     }
     uart_rx_program_init(pio, sm, offset, UART_RX_PIN, BAUD_RATE);
 
@@ -37,7 +37,7 @@ void uart_configure()
         pio_irq++;
         if (irq_get_exclusive_handler(pio_irq))
         {
-        //    printf("All IRQs are in use\n");
+            //    printf("All IRQs are in use\n");
         }
     }
     irq_add_shared_handler(pio_irq, pio_irq_func, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY); // Add a shared IRQ handler
@@ -53,7 +53,7 @@ void pio_irq_func(void)
         char c = uart_rx_program_getc(pio, sm);
         if (!queue_try_add(&fifo, &c))
         {
-          //  printf("fifo full\n");
+            //  printf("fifo full\n");
         }
     }
     async_context_set_work_pending(&async_context.core, &worker);
@@ -67,17 +67,19 @@ void async_worker_func(async_context_t *async_context, async_when_pending_worker
         char ch;
         if (!queue_try_remove(&fifo, &ch))
         {
-         //   printf("fifo empty\n");
+            //   printf("fifo empty\n");
         }
         rx_buffer[counter] = ch;
         counter++;
 
         if (ch == '\n')
         {
-          //  printf("len: %d \n", counter);
+            //  printf("len: %d \n", counter);
+            rx_buffer[counter + 2] = '\0';
             counter = 0;
             nmea_parcer(rx_buffer);
-            memset(rx_buffer, '\0', 160);
+
+            // memset(rx_buffer, '\0', 160);
         }
     }
 }

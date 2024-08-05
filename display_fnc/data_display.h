@@ -4,8 +4,6 @@
 #include "display_functions.h"
 #include "../gps_ublox/gps.h"
 
-extern struct Time time;
-extern struct Position pos;
 
 bool drawDisplayIrq(repeating_timer_t *rt);
 

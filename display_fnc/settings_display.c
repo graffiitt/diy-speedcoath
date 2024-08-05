@@ -3,13 +3,14 @@
 cvector(struct ItemObjectList) settingsItems = NULL;
 
 char *settingsText[] = {
-    "bluetooth",
+    "bluetooth connect",
     "items display"};
 
+extern void bleSettingsSetup();
 extern void setupDispItemsSetup();
 void settingsSetup()
 {
-    struct ItemObjectList str1 = {settingsText[0], 0};
+    struct ItemObjectList str1 = {settingsText[0], bleSettingsSetup};
     cvector_push_back(settingsItems, str1);
     struct ItemObjectList str2 = {settingsText[1], setupDispItemsSetup};
     cvector_push_back(settingsItems, str2);
