@@ -75,7 +75,7 @@ void async_worker_func(async_context_t *async_context, async_when_pending_worker
         if (ch == '\n')
         {
             //  printf("len: %d \n", counter);
-            rx_buffer[counter + 2] = '\0';
+            rx_buffer[counter] = '\0';
             counter = 0;
             nmea_parcer(rx_buffer);
 

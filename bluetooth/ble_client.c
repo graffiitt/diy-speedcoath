@@ -14,6 +14,8 @@ static uint8_t body_sensor_location;
 static gatt_client_notification_t notification_listener;
 static int listener_registered;
 
+void (*handlerConnection)(void);
+
 void ble_init()
 {
     if (cyw43_arch_init())
@@ -128,6 +130,8 @@ void main_hci_event_handler(uint8_t packet_type, uint16_t channel, uint8_t *pack
             gatt_client_stop_listening_for_characteristic_value_updates(&notification_listener);
         }
         stateBLE = TC_OFF;
+        if (handlerConnection)
+            handlerConnection();
         printf("Disconnected  ble\n");
         if (stateBLE == TC_OFF)
             break;
@@ -227,12 +231,18 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
             {
                 printf("CHARACTERISTIC_QUERY_RESULT - ATT Error 0x%02x.\n", packet[4]);
                 stateBLE = TC_CONNECTED;
+                if (handlerConnection)
+                    handlerConnection();
+                
                 break;
             }
             if (body_sensor_location_characteristic.value_handle == 0)
             {
                 printf("Sensor Location characteristic not available.\n");
                 stateBLE = TC_CONNECTED;
+                if (handlerConnection)
+                    handlerConnection();
+                
                 break;
             }
             stateBLE = TC_W4_HEART_RATE_MEASUREMENT_CHARACTERISTIC;
@@ -254,6 +264,9 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
             break;
         case GATT_EVENT_QUERY_COMPLETE:
             stateBLE = TC_CONNECTED;
+            if (handlerConnection)
+                handlerConnection();
+            
             break;
         default:
             break;

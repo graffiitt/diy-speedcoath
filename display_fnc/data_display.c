@@ -112,12 +112,12 @@ void drawSplitItem(const int x, const int y)
 {
     char str[5];
     double min, sec;
-    if (pos.speed != 0)
+    if (pos.speed > 4)
         sec = modf(30 / pos.speed, &min);
     else
         sec = min = 0;
-    //sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
-   // st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
+    sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
+    st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
 }
 
 uint8_t bufState[] = {0, 0, 0, 0};

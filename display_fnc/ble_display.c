@@ -3,9 +3,11 @@
 repeating_timer_t _bleTimer;
 extern cvector(struct BLE_Item) bleItems;
 extern gc_state_t stateBLE;
+extern void (*handlerConnection)(void);
 
 void bleSettingsSetup()
 {
+    handlerConnection = &updateDisp;
     bleSettingsButtonHandler();
     drawDiplay = &bleSettingsDisplayDraw;
 }
@@ -28,7 +30,7 @@ void bleSettingsDisplayDraw()
     else if (stateBLE == TC_CONNECTED)
         st7567_WriteString(0, 0, "bluetooth connected", FontStyle_veranda_9);
     else
-        st7567_WriteString(0, 0, "bluetooth", FontStyle_veranda_9);
+        st7567_WriteString(0, 0, "bluetooth disconnected", FontStyle_veranda_9);
 
     if (stateBLE == TC_CONNECTED)
         st7567_WriteString(7, 16, "device connected", FontStyle_veranda_9);
@@ -66,17 +68,11 @@ void bleSettingsConnectButton()
 {
     if (stateBLE == TC_OFF)
     {
-        setButtonHandlerLong(0, bleSettingsDisconnectButton);
         connectDevice(&cvector_at(bleItems, selectRow)->address, cvector_at(bleItems, selectRow)->addr_type);
     }
-}
-
-void bleSettingsDisconnectButton()
-{
-    if (stateBLE == TC_CONNECTED)
+    else if (stateBLE == TC_CONNECTED)
     {
         printf("discon button\n");
-        setButtonHandlerLong(0, bleSettingsConnectButton);
         disconnectDevice();
     }
 }

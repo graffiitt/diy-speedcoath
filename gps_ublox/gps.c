@@ -3,6 +3,7 @@
 static const uint8_t set5hz[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A}; //(5Hz)
 
 struct Position pos;
+struct Position lastPose;
 struct Time time;
 
 void gps_init()
@@ -179,22 +180,33 @@ void parse_VTG(uint8_t *data)
     }
 }
 
-double calc_distance(double lat1, double lon1, double lat2, double lon2)
+double calc_distance()
 {
-    double theta, dist;
-    if ((lat1 == lat2) && (lon1 == lon2))
+    static double longtitude = 0;
+    static double latitude = 0;
+
+    if (latitude == 0 && latitude == 0)
+    {
+        longtitude = pos.longtitude;
+        latitude = pos.latitude;
+        return 0;
+    }
+
+    if ((latitude == pos.latitude) && (longtitude == pos.longtitude))
     {
         return 0;
     }
     else
     {
-        theta = lon1 - lon2;
-        dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+        double theta, dist;
+        theta = longtitude - pos.longtitude;
+        dist = sin(deg2rad(latitude)) * sin(deg2rad(pos.latitude)) + cos(deg2rad(latitude)) * cos(deg2rad(pos.latitude)) * cos(deg2rad(theta));
         dist = acos(dist);
         dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        dist = dist * 1.609344;
+        dist = dist * 60 * 1.1515 * 1.609344;
 
+        longtitude = pos.longtitude;
+        latitude = pos.latitude;
         return dist;
     }
 }

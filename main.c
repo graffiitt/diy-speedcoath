@@ -24,7 +24,7 @@ void updateDisp()
 }
 
 int main()
- {
+{
 
   timer_hw->dbgpause = 0x2;
   stdio_init_all();
@@ -35,21 +35,19 @@ int main()
   st7567_UpdateScreen();
   st7567_Clear();
 
-  ble_init();
-  
   gpio_deinit(5);
   gpio_init(5);
   gpio_set_dir(5, GPIO_OUT);
   gpio_put(5, 1);
   gps_init();
-  
+
+  ble_init();
+
   sleep_ms(1000);
 
   menuSetup();
   updateDisp();
   initDataDisp();
-
- 
 
   while (1)
   {
