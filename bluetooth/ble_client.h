@@ -17,6 +17,12 @@ struct BLE_Item
     bd_addr_type_t addr_type;
 };
 
+struct BLE_data
+{
+    uint16_t heart_rate;
+    uint8_t sensor_contact; // 2 -- no contact, 3 -- good contacts
+};
+
 typedef enum
 {
     TC_OFF,
@@ -30,7 +36,6 @@ typedef enum
     TC_W4_SENSOR_LOCATION,
     TC_CONNECTED
 } gc_state_t;
-
 
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 

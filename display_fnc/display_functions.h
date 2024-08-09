@@ -7,7 +7,7 @@
 #include "../cvector.h"
 
 #define NUM_DISPLAY_ROWS 4
-#define NUM_DATA_ITEMS 4
+#define NUM_DATA_ITEMS 5
 
 extern void updateDisp();
 extern uint8_t selectRow;

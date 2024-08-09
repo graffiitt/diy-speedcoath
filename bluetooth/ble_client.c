@@ -2,7 +2,7 @@
 
 cvector(struct BLE_Item) bleItems = NULL;
 gc_state_t stateBLE = TC_OFF;
-uint16_t heart_rate = 0;
+struct BLE_data bleData;
 
 static hci_con_handle_t connection_handle;
 static gatt_client_service_t heart_rate_service;
@@ -233,7 +233,7 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
                 stateBLE = TC_CONNECTED;
                 if (handlerConnection)
                     handlerConnection();
-                
+
                 break;
             }
             if (body_sensor_location_characteristic.value_handle == 0)
@@ -242,7 +242,7 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
                 stateBLE = TC_CONNECTED;
                 if (handlerConnection)
                     handlerConnection();
-                
+
                 break;
             }
             stateBLE = TC_W4_HEART_RATE_MEASUREMENT_CHARACTERISTIC;
@@ -266,7 +266,7 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
             stateBLE = TC_CONNECTED;
             if (handlerConnection)
                 handlerConnection();
-            
+
             break;
         default:
             break;
@@ -279,12 +279,14 @@ static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint
         case GATT_EVENT_NOTIFICATION:
             if (gatt_event_notification_get_value(packet)[0] & 1)
             {
-                heart_rate = little_endian_read_16(gatt_event_notification_get_value(packet), 1);
+                bleData.heart_rate = little_endian_read_16(gatt_event_notification_get_value(packet), 1);
             }
             else
             {
-                heart_rate = gatt_event_notification_get_value(packet)[1];
+                bleData.heart_rate = gatt_event_notification_get_value(packet)[1];
             }
+            bleData.sensor_contact = (gatt_event_notification_get_value(packet)[0] >> 1) & 3;
+
             break;
         case GATT_EVENT_QUERY_COMPLETE:
             break;

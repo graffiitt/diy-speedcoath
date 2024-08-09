@@ -3,12 +3,13 @@
 static const uint8_t set5hz[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A}; //(5Hz)
 
 struct Position pos;
-struct Position lastPose;
+// struct Position lastPose;
 struct Time time;
 
 void gps_init()
 {
     uart_configure();
+
     // sleep_ms(1000);
     // uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
 }
@@ -192,22 +193,32 @@ double calc_distance()
         return 0;
     }
 
+    if ((pos.latitude == 0) || (pos.longtitude == 0))
+        return 0;
+
     if ((latitude == pos.latitude) && (longtitude == pos.longtitude))
     {
         return 0;
     }
     else
     {
-        double theta, dist;
+        double theta;
+        double dist = 0.01f;
         theta = longtitude - pos.longtitude;
         dist = sin(deg2rad(latitude)) * sin(deg2rad(pos.latitude)) + cos(deg2rad(latitude)) * cos(deg2rad(pos.latitude)) * cos(deg2rad(theta));
         dist = acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515 * 1.609344;
 
-        longtitude = pos.longtitude;
-        latitude = pos.latitude;
-        return dist;
+        if (isinf(dist) == 0)
+        {
+            longtitude = pos.longtitude;
+            latitude = pos.latitude;
+            return dist;
+        }
+
+        else
+            return 0;
     }
 }
 
