@@ -64,13 +64,13 @@ static uint8_t const  veranda_9_Bitmaps[855] =
     0x10,  // ---O---.
 
     // ASCII: 37, char width: 11
-    0x31,  // --OO---O
-    0x4a,  // -O--O-O-
-    0x4a,  // -O--O-O-
-    0x35,  // --OO-O-O
-    0x0a,  // ----O-O-
-    0x0a,  // ----O-O-
-    0x11,  // ---O---O
+    0x61,  // -OO----O
+    0x92,  // O--O--O-
+    0x94,  // O--O-O--
+    0x7E,  // -OOOOOO-
+    0x29,  // --O-O--O
+    0x49,  // -O--O--O
+    0x86,  // O----OO-
     0x00,  // --------
     0x00,  // --------
 
@@ -658,7 +658,7 @@ static uint8_t const  veranda_9_Bitmaps[855] =
     0x00,  // -------.
 
     // ASCII: 91, char width: 4
-    0x60,  // -O--....
+    0x60,  // -OO-....
     0x40,  // -O--....
     0x40,  // -O--....
     0x40,  // -O--....
@@ -680,7 +680,7 @@ static uint8_t const  veranda_9_Bitmaps[855] =
     0x00,  // ----....
 
     // ASCII: 93, char width: 4
-    0x20,  // --O-....
+    0x60,  // -OO-....
     0x20,  // --O-....
     0x20,  // --O-....
     0x20,  // --O-....

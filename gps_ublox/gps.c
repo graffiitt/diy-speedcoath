@@ -3,17 +3,25 @@
 static const uint8_t set5hz[] = {0xB5, 0x62, 0x06, 0x08, 0x06, 0x00, 0xC8, 0x00, 0x01, 0x00, 0x01, 0x00, 0xDE, 0x6A}; //(5Hz)
 
 struct Position pos;
-// struct Position lastPose;
-struct Time time;
+struct Time timeGPS;
 
 void gps_init()
 {
     uart_configure();
-
+    gpio_deinit(5);
+    gpio_init(5);
+    gpio_set_dir(5, GPIO_OUT);
     // sleep_ms(1000);
     // uart_write_blocking(UART_ID, set5hz, sizeof set5hz);
 }
 
+void gps_on(bool state)
+{
+    if (state)
+        gpio_put(5, 1);
+    else
+        gpio_put(5, 0);
+}
 bool checkCRC(const uint8_t *str)
 {
     uint8_t lenght = strlen((const char *)str);
@@ -67,14 +75,14 @@ void parse_RMC(uint8_t *data)
                 case TIME_RMC:
                 {
                     char ch[] = {buff[0], buff[1]};
-                    time.hours = atoi(ch);
-                    time.hours = time.hours > 20 ? time.hours - 21 : time.hours + 3;
+                    timeGPS.hours = atoi(ch);
+                    timeGPS.hours = timeGPS.hours > 20 ? timeGPS.hours - 21 : timeGPS.hours + 3;
                     ch[0] = buff[2];
                     ch[1] = buff[3];
-                    time.minutes = atoi(ch);
+                    timeGPS.minutes = atoi(ch);
                     ch[0] = buff[4];
                     ch[1] = buff[5];
-                    time.seconds = atoi(ch);
+                    timeGPS.seconds = atoi(ch);
                     break;
                 }
                 case STATUS_RMC:

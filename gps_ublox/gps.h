@@ -29,6 +29,7 @@ struct Position
 };
 
 void gps_init();
+void gps_on(bool state);
 bool checkCRC(const uint8_t *str);
 void nmea_parcer(uint8_t *str);
 void parse_RMC(uint8_t *data);

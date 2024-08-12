@@ -28,6 +28,7 @@ void settingsButtonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, settingsBackButton);
+    setButtonHandlerLong(3, settingsOFFButton);
 }
 
 void settingsSelectButton()
@@ -52,6 +53,16 @@ void settingsBackButton()
     menuSetup();
     selectRow = 1;
     updateDisp();
+}
+
+extern void powerHandlerOFF();
+void settingsOFFButton()
+{
+    for (int i = cvector_size(settingsItems); 0 < i; i--)
+    {
+        cvector_pop_back(settingsItems);
+    }
+    powerHandlerOFF();
 }
 
 void settingsDisplayDraw()

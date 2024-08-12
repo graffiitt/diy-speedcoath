@@ -19,7 +19,7 @@ void st7567_Init()
 	gpio_set_dir(ST7567A_DC_Pin, GPIO_OUT);
 	gpio_init(ST7567_LED_Pin);
 	gpio_set_dir(ST7567_LED_Pin, GPIO_OUT);
-	gpio_put(ST7567_LED_Pin, 0);
+	st7565_backlight(true);
 	gpio_put(ST7567A_RST_Pin, 0);
 	sleep_ms(50);
 	gpio_put(ST7567A_RST_Pin, 1);
@@ -58,10 +58,11 @@ void st7567_Test()
 	st7567_DrawHLine(63, BLACK);
 
 	st7567_UpdateScreen();
-	// st7567_WriteString(0, 26 + 18, "12:34.6", Font_7x10);
-	// st7567_DrawWLine(120, BLACK);
-	// st7567_DrawHLine(60, BLACK);
-	// st7567_DrawLine(10, 58, 50, 50, BLACK);
+}
+
+void st7565_backlight(bool state)
+{
+	state ? gpio_put(ST7567_LED_Pin, 0) : gpio_put(ST7567_LED_Pin, 1);
 }
 
 void st7567_DrawHLine(uint8_t y, uint8_t color)
@@ -117,7 +118,6 @@ void st7567_DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t col
 			y1 += signY;
 		}
 	}
-	// st7567_UpdateScreen();
 }
 
 void st7567_WriteString(uint8_t x, uint8_t y, const char *str, fontStyle_t font)
@@ -128,13 +128,28 @@ void st7567_WriteString(uint8_t x, uint8_t y, const char *str, fontStyle_t font)
 		x += font.GlyphWidth[(int)*str - font.FirstAsciiCode];
 		str++;
 	}
-	// st7567_UpdateScreen();
+}
+
+void st7567_WriteStringBack(uint8_t x, uint8_t y, const char *str, fontStyle_t font)
+{
+	int8_t count = 0;
+	while (*(str + count))
+	{
+		count++;
+		x -= font.GlyphWidth[(int)*(str + count) - font.FirstAsciiCode];
+	}
+
+	for (; count >= 0; count--)
+	{
+		st7567_WriteChar(x, y, *(str), font);
+		x += font.GlyphWidth[(int)*(str)-font.FirstAsciiCode];
+		str++;
+	}
 }
 
 void st7567_Clear()
 {
 	memset(lcd_buffer, 0, 1024);
-	// st7567_UpdateScreen();
 }
 
 void st7567_SetPixelBuffer(uint8_t x, uint8_t y, uint8_t color)

@@ -9,6 +9,7 @@ void menuButtonHandler();
 
 // button handlers
 void menuSelectButton();
+void menuOFFButton();
 void menuDisplayDraw();
 
 #endif

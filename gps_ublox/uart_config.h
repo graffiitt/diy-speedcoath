@@ -17,9 +17,10 @@
 #define UART_TX_PIN 16
 #define UART_RX_PIN 17
 
-#define FIFO_SIZE 80
+#define FIFO_SIZE 160
 
 void uart_configure();
+void uart_async();
 
 void async_worker_func(async_context_t *async_context, async_when_pending_worker_t *worker);
 void pio_irq_func(void);

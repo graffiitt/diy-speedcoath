@@ -1,7 +1,9 @@
 #include "uart_config.h"
 #include "gps.h"
 
-uint8_t rx_buffer[160];
+uint8_t rx_buffer[FIFO_SIZE];
+uint8_t rx_buffer_last[FIFO_SIZE];
+bool parseMSG = true;
 
 PIO pio;
 uint sm;
@@ -23,6 +25,7 @@ void uart_configure()
     {
         //  printf("failed to setup context\n");
     }
+    // async_context.core.core_num = 0;
     async_context_add_when_pending_worker(&async_context.core, &worker);
     if (!init_pio(&uart_rx_program, &pio, &sm, &offset))
     {
@@ -44,6 +47,18 @@ void uart_configure()
     irq_set_enabled(pio_irq, true);                                                                // Enable the IRQ
     const uint irq_index = pio_irq - ((pio == pio0) ? PIO0_IRQ_0 : PIO1_IRQ_0);                    // Get index of the IRQ
     pio_set_irqn_source_enabled(pio, irq_index, pis_sm0_rx_fifo_not_empty, true);                  // Set pio to tell us when the FIFO is NOT empty
+}
+
+void uart_async()
+{
+    if (parseMSG == false)
+    {
+        nmea_parcer(rx_buffer_last);
+        parseMSG = true;
+    }
+
+    // async_context_poll(&async_context.core);
+    // async_context_wait_for_work_ms(&async_context.core, 2000);
 }
 
 void pio_irq_func(void)
@@ -71,15 +86,12 @@ void async_worker_func(async_context_t *async_context, async_when_pending_worker
         }
         rx_buffer[counter] = ch;
         counter++;
-
         if (ch == '\n')
         {
-            //  printf("len: %d \n", counter);
             rx_buffer[counter] = '\0';
             counter = 0;
-            nmea_parcer(rx_buffer);
-
-            // memset(rx_buffer, '\0', 160);
+            memcpy(rx_buffer_last, rx_buffer, FIFO_SIZE);
+            parseMSG = false;
         }
     }
 }

@@ -4,7 +4,7 @@ include(pico_sdk_import.cmake)
 
 project(speedcoatch C CXX ASM)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
@@ -25,6 +25,8 @@ endforeach(source)
 
 add_executable(${PROJECT_NAME}
 main.c
+battery.c
+battery.h
 ${CPPFILE}
 ${HFILE}
 )
@@ -39,6 +41,8 @@ button_handler
 gps_ublox
 st7565
 ble_tools
+hardware_adc
+hardware_rtc
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -50,5 +54,5 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
-pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
 pico_enable_stdio_uart(${PROJECT_NAME} 0)

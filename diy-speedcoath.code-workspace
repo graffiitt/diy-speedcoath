@@ -9,22 +9,6 @@
 			"path": "../pico-examples"
 		},
 		{
-			"name": "gps ublox n8m",
-			"path": "../gps ublox n8m"
-		},
-		{
-			"name": "bluetooth search",
-			"path": "../bluetooth search"
-		},
-		{
-			"name": "bluetooth heart rate client",
-			"path": "../bluetooth heart rate client"
-		},
-		{
-			"name": "bluetooth hrt client 2",
-			"path": "../bluetooth hrt client 2"
-		},
-		{
 			"path": "../../kalman-filter-master"
 		}
 	],
@@ -91,7 +75,13 @@
 			"settings_display.h": "c",
 			"gps.h": "c",
 			"ble_diplay.h": "c",
-			"ble_client.h": "c"
+			"ble_client.h": "c",
+			"battery.h": "c",
+			"sstream": "c",
+			"regex": "c",
+			"uart_config.h": "c",
+			"async_context_threadsafe_background.h": "c",
+			"queue.h": "c"
 		},
 		"cortex-debug.variableUseNaturalFormat": true
 	}

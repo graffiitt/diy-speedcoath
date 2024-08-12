@@ -29,6 +29,7 @@ void menuButtonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, 0);
+    setButtonHandlerLong(3, menuOFFButton);
 }
 
 void menuSelectButton()
@@ -41,6 +42,16 @@ void menuSelectButton()
     }
     selectRow = 0;
     updateDisp();
+}
+
+extern void powerHandlerOFF();
+void menuOFFButton()
+{
+    for (int i = cvector_size(menuItems); 0 < i; i--)
+    {
+        cvector_pop_back(menuItems);
+    }
+    powerHandlerOFF();
 }
 
 void menuDisplayDraw()

@@ -10,5 +10,5 @@ void settingsDisplayDraw();
 // button handlers
 void settingsSelectButton();
 void settingsBackButton();
-
+void settingsOFFButton();
 #endif
