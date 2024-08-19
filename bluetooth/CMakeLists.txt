@@ -26,4 +26,12 @@ pico_btstack_ble
 pico_btstack_cyw43
 pico_cyw43_arch_none
 )
- 
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}
+    )
+
+    
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    RUNNING_AS_CLIENT=1
+)

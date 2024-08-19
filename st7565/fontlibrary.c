@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "fontlibrary.h"
 
-static uint8_t const  veranda_9_Bitmaps[855] = 
+static const uint8_t const  veranda_9_Bitmaps[855] = 
 {
     // ASCII: 32, char width: 3
     0x00,  // ---.....
@@ -1054,7 +1054,7 @@ static uint8_t const  veranda_9_Bitmaps[855] =
     0x00,  // -------.
 };
 
-static uint8_t const  veranda_9_Widths[95] = 
+static const uint8_t const  veranda_9_Widths[95] = 
 {
      3,  5,  5,  7,  7, 11,  7,  3, 
      4,  4,  7,  7,  3,  5,  3,  4, 
@@ -1081,7 +1081,7 @@ fontStyle_t FontStyle_veranda_9 =
     veranda_9_Bitmaps
 };
 
-static uint8_t const  veranda_ru_9_Bitmaps[576] = 
+static const uint8_t const  veranda_ru_9_Bitmaps[576] = 
 {
     // ASCII: 192, char width: 8
     0x18,  // ---OO---
@@ -1788,7 +1788,7 @@ static uint8_t const  veranda_ru_9_Bitmaps[576] =
     0x00,  // ------..
 };
 
-static uint8_t const  veranda_ru_9_Widths[64] = 
+static const uint8_t const  veranda_ru_9_Widths[64] = 
 {
      8,  8,  8,  8,  8,  8, 10,  8, 
      7,  7,  7,  7,  5,  5,  5,  5, 
@@ -1811,7 +1811,7 @@ fontStyle_t FontStyle_veranda_ru_9 =
     veranda_ru_9_Bitmaps
 };
 
-static uint8_t const  veranda_18_Bitmaps[6840] = 
+static const uint8_t const  veranda_18_Bitmaps[6840] = 
 {
     // ASCII: 32, char width: 6
     0x00, 0x00, 0x00, 0x00,  // ------..........................
@@ -3714,7 +3714,7 @@ static uint8_t const  veranda_18_Bitmaps[6840] =
     0x00, 0x00, 0x00, 0x00,  // ---------------.................
 };
 
-static uint8_t const  veranda_18_Widths[95] = 
+static const uint8_t const  veranda_18_Widths[95] = 
 {
      6,  7,  8, 15, 11, 19, 13,  5, 
      8,  8, 11, 15,  7,  8,  7,  8, 
@@ -3741,7 +3741,7 @@ fontStyle_t FontStyle_veranda_18 =
     veranda_18_Bitmaps
 };
 
-static uint8_t const  veranda_26_Bitmaps[1144] = 
+static const uint8_t const  veranda_26_Bitmaps[1144] = 
 {
     // ASCII: 48, char width: 17
     0x03, 0xe0, 0x00, 0x00,  // ------OOOOO------...............
@@ -4052,7 +4052,7 @@ static uint8_t const  veranda_26_Bitmaps[1144] =
     0x00, 0x00, 0x00, 0x00,  // ------------....................
 };
 
-static uint8_t const  veranda_26_Widths[11] = 
+static const uint8_t const  veranda_26_Widths[11] = 
 {
     17, 17, 17, 17, 17, 17, 17, 17, 
     17, 17, 12, 

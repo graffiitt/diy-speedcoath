@@ -22,7 +22,6 @@
 void uart_configure();
 void uart_async();
 
-void async_worker_func(async_context_t *async_context, async_when_pending_worker_t *worker);
 void pio_irq_func(void);
 void async_worker_func(async_context_t *async_context, async_when_pending_worker_t *worker);
 bool init_pio(const pio_program_t *program, PIO *pio_hw, uint *sm, uint *offset);

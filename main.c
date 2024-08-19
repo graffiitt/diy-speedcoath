@@ -32,10 +32,12 @@ void powerHandlerON()
   st7567_WriteString(35, 20, "GRAFFIT", FontStyle_veranda_18);
   st7567_UpdateScreen();
   st7567_Clear();
+  st7565_backlight(true);
 
   busy_wait_ms(1000);
   menuSetup();
   updateDisp();
+
 }
 
 void powerHandlerOFF()

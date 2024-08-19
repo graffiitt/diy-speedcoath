@@ -9,7 +9,13 @@
 			"path": "../pico-examples"
 		},
 		{
-			"path": "../../kalman-filter-master"
+			"path": "../freertos_test"
+		},
+		{
+			"path": "../gps ublox n8m"
+		},
+		{
+			"path": "../button_handler"
 		}
 	],
 	"settings": {
@@ -81,7 +87,12 @@
 			"regex": "c",
 			"uart_config.h": "c",
 			"async_context_threadsafe_background.h": "c",
-			"queue.h": "c"
+			"queue.h": "c",
+			"freertos.h": "c",
+			"button.h": "c",
+			"task.h": "c",
+			"timer.h": "c",
+			"timers.h": "c"
 		},
 		"cortex-debug.variableUseNaturalFormat": true
 	}

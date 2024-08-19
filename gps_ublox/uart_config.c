@@ -25,7 +25,7 @@ void uart_configure()
     {
         //  printf("failed to setup context\n");
     }
-    // async_context.core.core_num = 0;
+ 
     async_context_add_when_pending_worker(&async_context.core, &worker);
     if (!init_pio(&uart_rx_program, &pio, &sm, &offset))
     {
@@ -76,6 +76,7 @@ void pio_irq_func(void)
 
 void async_worker_func(async_context_t *async_context, async_when_pending_worker_t *worker)
 {
+    // async_context_add_when_pending_worker()
     while (!queue_is_empty(&fifo))
     {
         static uint8_t counter = 0;
