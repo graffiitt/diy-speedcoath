@@ -4,11 +4,11 @@
 #include "pico/stdlib.h"
 #include "hardware/watchdog.h"
 
-#include "display_fnc/menu_display.h"
-#include "display_fnc/data_display.h"
+#include "display_task/menu_display.h"
+#include "display_task/data_display.h"
 
 #include "bluetooth/ble_client.h"
-#include "st7565/st7567.h"
+#include "st7567.h"
 #include "button_handler/button.h"
 #include "gps_ublox/gps.h"
 #include "battery.h"
