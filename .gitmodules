@@ -1,0 +1,3 @@
+[submodule "st7565-library-pico"]
+	path = st7565-library-pico
+	url = https://github.com/graffiitt/st7565-library-pico.git
