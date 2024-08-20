@@ -10,7 +10,7 @@
 #include "bluetooth/ble_client.h"
 #include "st7567.h"
 #include "button_handler/button.h"
-#include "gps_ublox/gps.h"
+#include "gps.h"
 #include "battery.h"
 
 void (*drawDiplay)();
@@ -98,7 +98,6 @@ int main()
 
   while (1)
   {
-    uart_async();
     watchdog_update();
   }
   return 0;

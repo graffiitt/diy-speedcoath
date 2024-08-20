@@ -7,7 +7,7 @@
 #include "pico/util/datetime.h"
 
 #include "display_functions.h"
-#include "../gps_ublox/gps.h"
+#include "gps.h"
 #include "../bluetooth/ble_client.h"
 
 #define MINIMUM_SPEED 0.01

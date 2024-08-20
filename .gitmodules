@@ -1,3 +1,6 @@
 [submodule "st7565-library-pico"]
 	path = st7565-library-pico
 	url = https://github.com/graffiitt/st7565-library-pico.git
+[submodule "gps-ublox-n8m-rp2040"]
+	path = gps-ublox-n8m-rp2040
+	url = https://github.com/graffiitt/gps-ublox-n8m-rp2040.git

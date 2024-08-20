@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 set(PICO_BOARD pico_w CACHE STRING "Board type")
 include(pico_sdk_import.cmake)
+include(FreeRTOS_Kernel_import.cmake)
 
 project(speedcoatch C CXX ASM)
 
@@ -30,9 +31,11 @@ ${CPPFILE}
 ${HFILE}
 )
 
+set(CONFIG_PATH_FREERTOS ${CMAKE_CURRENT_LIST_DIR}/configs)
+
 add_subdirectory(bluetooth)
 add_subdirectory(button_handler)
-add_subdirectory(gps_ublox)
+add_subdirectory(gps-ublox-n8m-rp2040/gps_ublox)
 add_subdirectory(st7565-library-pico)
 
 target_link_libraries(${PROJECT_NAME}
@@ -43,6 +46,7 @@ ble_tools
 hardware_adc
 hardware_rtc
 )
+
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 ${CMAKE_CURRENT_LIST_DIR}/
