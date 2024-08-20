@@ -23,7 +23,6 @@ foreach(source ${HFILE})
     message("  - " ${source})
 endforeach(source)
  
-
 add_executable(${PROJECT_NAME}
 src/main.c
 src/battery.c
@@ -52,6 +51,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 ${CMAKE_CURRENT_LIST_DIR}/
 ${CMAKE_CURRENT_LIST_DIR}/inc
 ${CMAKE_CURRENT_LIST_DIR}/configs
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+configNUMBER_OF_CORES=1
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})

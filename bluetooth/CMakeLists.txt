@@ -21,7 +21,6 @@ ${HFILE}
  
 target_link_libraries(${PROJECT_NAME}
 pico_stdlib
-#pico_btstack_classic
 pico_btstack_ble
 pico_btstack_cyw43
 pico_cyw43_arch_none
@@ -29,8 +28,7 @@ pico_cyw43_arch_none
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../configs
-    )
-
+)
     
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     RUNNING_AS_CLIENT=1
