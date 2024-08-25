@@ -2,7 +2,7 @@
 #define DISPLAY_FUNCTIONS_H
 
 #include "st7567.h"
-#include "button_handler/button.h"
+#include "../button_handler/button.h"
 #include <string.h>
 #include "cvector.h"
 

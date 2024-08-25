@@ -7,9 +7,9 @@
 #include "display_task/menu_display.h"
 #include "display_task/data_display.h"
 
-#include "bluetooth/ble_client.h"
+#include "../bluetooth/ble_client.h"
 #include "st7567.h"
-#include "button_handler/button.h"
+#include "../button_handler/button.h"
 #include "gps.h"
 #include "battery.h"
 
