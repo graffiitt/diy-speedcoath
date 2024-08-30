@@ -5,11 +5,13 @@
 #include "../button_handler/button.h"
 #include <string.h>
 #include "cvector.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 #define NUM_DISPLAY_ROWS 4
 #define NUM_DATA_ITEMS 6
 
-extern void updateDisp();
+extern TaskHandle_t taskDisplay;
 extern uint8_t selectRow;
 extern void (*drawDiplay)();
 

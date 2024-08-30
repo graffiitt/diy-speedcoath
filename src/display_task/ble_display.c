@@ -7,7 +7,7 @@ extern void (*handlerConnection)(void);
 
 void bleSettingsSetup()
 {
-    handlerConnection = &updateDisp;
+    // handlerConnection = &updateDisp;
     bleSettingsButtonHandler();
     drawDiplay = &bleSettingsDisplayDraw;
 }
@@ -88,13 +88,13 @@ void bleSettingsUpdate()
         ble_scan_start();
         add_repeating_timer_us(-5000000, bleScanTimer, NULL, &_bleTimer);
     }
-    updateDisp();
+    // updateDisp();
 }
 
 bool bleScanTimer(repeating_timer_t *rt)
 {
     ble_scan_stop();
-    updateDisp();
+    // updateDisp();
     cancel_repeating_timer(&_bleTimer);
     return true;
 }
@@ -110,5 +110,5 @@ void bleSettingsBackButton()
     ble_clearDevices();
     settingsSetup();
     selectRow = 0;
-    updateDisp();
+    // updateDisp();
 }

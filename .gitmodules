@@ -4,3 +4,6 @@
 [submodule "gps-ublox-n8m-rp2040"]
 	path = gps-ublox-n8m-rp2040
 	url = https://github.com/graffiitt/gps-ublox-n8m-rp2040.git
+[submodule "pico-button-handler"]
+	path = pico-button-handler
+	url = https://github.com/graffiitt/pico-button-handler.git

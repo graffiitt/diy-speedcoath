@@ -92,7 +92,11 @@
 			"button.h": "c",
 			"task.h": "c",
 			"timer.h": "c",
-			"timers.h": "c"
+			"timers.h": "c",
+			"display_task.h": "c",
+			"watchdog.h": "c",
+			"string.h": "c",
+			"irq.h": "c"
 		},
 		"cortex-debug.variableUseNaturalFormat": true
 	}

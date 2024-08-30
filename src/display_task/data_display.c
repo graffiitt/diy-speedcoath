@@ -38,7 +38,7 @@ struct DataDisplayValue dataDisp = {.battery = &chargeValue,
 
 bool drawDisplayIrq(repeating_timer_t *rt)
 {
-    updateDisp();
+    // updateDisp();
     return true;
 }
 
@@ -95,7 +95,7 @@ void dataDisplayBackButton()
     setButtonHandlerLong(3, powerHandlerOFF);
     cancel_repeating_timer(&_timerDisplay);
     menuSetup();
-    updateDisp();
+    // updateDisp();
 }
 
 void initDataDisp()
@@ -221,14 +221,14 @@ void setupDispItemsBackButton()
 {
     settingsSetup();
     selectRow = 1;
-    updateDisp();
+    // updateDisp();
 }
 
 void setupDispItemsApplyButton()
 {
     memcpy(currentDataItem, bufState, 4);
     st7567_WriteString(110, 0, "wr", FontStyle_veranda_9);
-    updateDisp();
+    // updateDisp();
 }
 
 void setupDispItemsUpButton()
@@ -237,7 +237,7 @@ void setupDispItemsUpButton()
         selectRow++;
     else
         selectRow = 0;
-    updateDisp();
+    // updateDisp();
 }
 
 void setupDispItemsChangeUpButton()
@@ -246,7 +246,7 @@ void setupDispItemsChangeUpButton()
         bufState[selectRow]++;
     else
         bufState[selectRow] = 0;
-    updateDisp();
+    // updateDisp();
 }
 
 void setupDispItemsDownButton()
@@ -255,7 +255,7 @@ void setupDispItemsDownButton()
         selectRow--;
     else
         selectRow = 3;
-    updateDisp();
+    // updateDisp();
 }
 
 void setupDispItemsChangeDownButton()
@@ -264,5 +264,5 @@ void setupDispItemsChangeDownButton()
         bufState[selectRow]--;
     else
         bufState[selectRow] = NUM_DATA_ITEMS - 1;
-    updateDisp();
+    // updateDisp();
 }

@@ -1,19 +1,18 @@
 #include "display_task/menu_display.h"
 
 cvector(struct ItemObjectList) menuItems = NULL;
-
 char *menuText[] = {
     "display",
     "settings"};
 
-extern void settingsSetup();
-extern void dataDisplaySetup();
+// extern void settingsSetup();
+// extern void dataDisplaySetup();
 
 void menuSetup()
 {
-    struct ItemObjectList str1 = {menuText[0], &dataDisplaySetup};
+    struct ItemObjectList str1 = {menuText[0], 0};
     cvector_push_back(menuItems, str1);
-    struct ItemObjectList str2 = {menuText[1], &settingsSetup};
+    struct ItemObjectList str2 = {menuText[1], 0};
     cvector_push_back(menuItems, str2);
 
     menuButtonHandler();
@@ -29,7 +28,7 @@ void menuButtonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, 0);
-    setButtonHandlerLong(3, menuOFFButton);
+    setButtonHandlerLong(3, 0);
 }
 
 void menuSelectButton()
@@ -41,17 +40,7 @@ void menuSelectButton()
         cvector_pop_back(menuItems);
     }
     selectRow = 0;
-    updateDisp();
-}
-
-extern void powerHandlerOFF();
-void menuOFFButton()
-{
-    for (int i = cvector_size(menuItems); 0 < i; i--)
-    {
-        cvector_pop_back(menuItems);
-    }
-    powerHandlerOFF();
+//    updateDisp();
 }
 
 void menuDisplayDraw()

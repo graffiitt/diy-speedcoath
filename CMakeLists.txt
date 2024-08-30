@@ -33,7 +33,7 @@ ${HFILE}
 set(CONFIG_PATH_FREERTOS ${CMAKE_CURRENT_LIST_DIR}/configs)
 
 add_subdirectory(bluetooth)
-add_subdirectory(button_handler)
+add_subdirectory(pico-button-handler/button_handler)
 add_subdirectory(gps-ublox-n8m-rp2040/gps_ublox)
 add_subdirectory(st7565-library-pico)
 

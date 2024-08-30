@@ -40,7 +40,7 @@ void settingsSelectButton()
     }
 
     selectRow = 0;
-    updateDisp();
+    //updateDisp();
 }
 
 extern void menuSetup();
@@ -52,7 +52,7 @@ void settingsBackButton()
     }
     menuSetup();
     selectRow = 1;
-    updateDisp();
+    // updateDisp();
 }
 
 extern void powerHandlerOFF();
