@@ -11,6 +11,6 @@
 #define DELTA_VOLTAGE (MAX_VOLTAGE-MIN_VOLTAGE)
 
 void start_adc();
-void updateCharge();
+uint8_t getCharge();
 
 #endif

@@ -1,8 +1,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "hardware/timer.h"
-#include "hardware/irq.h"
 #include "hardware/rtc.h"
 #include "pico/stdlib.h"
 #include "hardware/watchdog.h"
@@ -40,6 +38,7 @@ int main()
   }
   st7567_UpdateScreen();
   st7567_Clear();
+  sleep_ms(2000);
   buttonHandlerInit();
 
   start_adc();

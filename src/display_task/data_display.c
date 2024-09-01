@@ -1,9 +1,7 @@
 #include "display_task/data_display.h"
+#include "battery.h"
 
 extern struct Time timeGPS;
-extern struct Position pos;
-extern uint8_t chargeValue;
-extern void powerHandlerOFF();
 
 //     "pulse",
 //     "stroke count",
@@ -11,7 +9,7 @@ extern void powerHandlerOFF();
 //     "split 500m",
 //     "distance"
 //      "chrono"
-char *dataItemsText[] = {
+const char *dataItemsText[] = {
     "pulse",
     "stroke count",
     "stroke rate",
@@ -21,35 +19,18 @@ char *dataItemsText[] = {
 
 uint8_t currentDataItem[] = {0, 1, 4, 3};
 struct ItemObjectData dataItems[NUM_DATA_ITEMS];
-repeating_timer_t _timerDisplay;
+struct DataDisplay dataDisp = {.distance = 0.00f};
 
-datetime_t timeStruct = {
-    .year = 2020,
-    .month = 06,
-    .day = 05,
-    .dotw = 5, // 0 is Sunday, so 5 is Friday
-    .hour = 0,
-    .min = 0,
-    .sec = 0};
+static void displayDraw();
+static void backButton();
+static void drawPulseItem(const int x, const int y);
+static void drawStrokeCountItem(const int x, const int y);
+static void drawStroceRateItem(const int x, const int y);
+static void drawSplitItem(const int x, const int y);
+static void drawDistanse(const int x, const int y);
+static void drawChrono(const int x, const int y);
 
-struct DataDisplayValue dataDisp = {.battery = &chargeValue,
-                                    .distance = 0.00f,
-                                    .ble = &bleData};
-
-bool drawDisplayIrq(repeating_timer_t *rt)
-{
-    // updateDisp();
-    return true;
-}
-
-void dataDisplaySetup()
-{
-    dataDisplayButtonHandler();
-    drawDiplay = &dataDisplayDisplayDraw;
-    add_repeating_timer_us(5000000, drawDisplayIrq, NULL, &_timerDisplay);
-}
-
-void dataDisplayButtonHandler()
+static void buttonHandler()
 {
     setButtonHandlerShort(0, 0);
     setButtonHandlerLong(0, 0);
@@ -57,26 +38,25 @@ void dataDisplayButtonHandler()
     setButtonHandlerLong(1, 0);
     setButtonHandlerShort(2, 0);
     setButtonHandlerLong(2, 0);
-    setButtonHandlerShort(3, dataDisplayBackButton);
-    setButtonHandlerLong(3, dataDisplayButtonOff);
+    setButtonHandlerShort(3, backButton);
 }
 
-void dataDisplayButtonOff()
+void dataDisplaySetup()
 {
-    cancel_repeating_timer(&_timerDisplay);
-    powerHandlerOFF();
+    buttonHandler();
+    drawDiplay = &displayDraw;
 }
 
-void dataDisplayDisplayDraw()
+void displayDraw()
 {
     char str[10];
     sprintf(str, "%02d:%02d:%02d", timeGPS.hours, timeGPS.minutes, timeGPS.seconds);
     st7567_WriteString(36, 0, str, FontStyle_veranda_9);
-    sprintf(str, "%d%%", *dataDisp.battery);
-    st7567_WriteStringBack(124, 0, str, FontStyle_veranda_9);
+    sprintf(str, "%d%%", getCharge());
+    st7567_WriteStringBack(127, 0, str, FontStyle_veranda_9);
 
-    if (pos.status == 1)
-        st7567_WriteString(0, 0, "*", FontStyle_veranda_9);
+    // if (pos.status == 1)
+    //     st7567_WriteString(0, 0, "*", FontStyle_veranda_9);
 
     dataItems[currentDataItem[0]].drawItem(0, 11);
     dataItems[currentDataItem[1]].drawItem(64, 11);
@@ -90,12 +70,11 @@ void dataDisplayDisplayDraw()
 }
 
 extern void menuSetup();
-void dataDisplayBackButton()
+void backButton()
 {
-    setButtonHandlerLong(3, powerHandlerOFF);
-    cancel_repeating_timer(&_timerDisplay);
+    startChangeDisplay();
     menuSetup();
-    // updateDisp();
+    endChangeDisplay();
 }
 
 void initDataDisp()
@@ -113,19 +92,19 @@ void initDataDisp()
     dataItems[5].text = dataItemsText[5];
     dataItems[5].drawItem = &drawChrono;
 
-    rtc_set_datetime(&timeStruct);
+    // rtc_set_datetime(&timeStruct);
 }
 
 void drawPulseItem(const int x, const int y)
 {
 
-    if (dataDisp.ble->sensor_contact == 3)
-    {
-        char str[5];
-        sprintf(str, "%03d", (int)dataDisp.ble->heart_rate);
-        st7567_WriteString(x, y + 4, str, FontStyle_veranda_26);
-    }
-    else
+    // if (dataDisp.ble->sensor_contact == 3)
+    // {
+    //     char str[5];
+    //     sprintf(str, "%03d", (int)dataDisp.ble->heart_rate);
+    //     st7567_WriteString(x, y + 4, str, FontStyle_veranda_26);
+    // }
+    // else
         st7567_WriteString(x, y + 4, "---", FontStyle_veranda_18);
 
     st7567_WriteString(x + 51, y + 15, "hr", FontStyle_veranda_9);
@@ -151,10 +130,10 @@ void drawSplitItem(const int x, const int y)
 {
     char str[5];
     double min, sec;
-    if (pos.speed > MINIMUM_SPEED)
-        sec = modf(30 / pos.speed, &min);
-    else
-        sec = min = 0;
+    // if (pos.speed > MINIMUM_SPEED)
+    //     sec = modf(30 / pos.speed, &min);
+    // else
+    //     sec = min = 0;
     sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
     st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
 }
@@ -162,7 +141,7 @@ void drawSplitItem(const int x, const int y)
 void drawDistanse(const int x, const int y)
 {
     char str[6];
-    if (pos.speed > MINIMUM_SPEED)
+    // if (pos.speed > MINIMUM_SPEED)
         dataDisp.distance += calc_distance();
     //  dataDisp.distance+=0.1;
     sprintf(str, "%0.2f", dataDisp.distance);
@@ -172,97 +151,8 @@ void drawDistanse(const int x, const int y)
 void drawChrono(const int x, const int y)
 {
     char str[10];
-    rtc_get_datetime(&timeStruct);
+    //  rtc_get_datetime(&timeStruct);
 
-    sprintf(str, "%01d:%02d:%02d", timeStruct.hour, timeStruct.min, timeStruct.sec);
+    // sprintf(str, "%01d:%02d:%02d", timeStruct.hour, timeStruct.min, timeStruct.sec);
     st7567_WriteString(x + 3, y + 9, str, FontStyle_veranda_9);
-}
-
-uint8_t bufState[] = {0, 0, 0, 0};
-void setupDispItemsSetup()
-{
-    memcpy(bufState, currentDataItem, 4);
-    setupDispItemsButtonHandler();
-    drawDiplay = &setupDispItemsDraw;
-}
-
-void setupDispItemsDraw()
-{
-    char str[20];
-    st7567_WriteString(0, 0, "display items", FontStyle_veranda_9);
-
-    sprintf(str, "1: %s", dataItems[bufState[0]].text);
-    st7567_WriteString(7, 16, str, FontStyle_veranda_9);
-    sprintf(str, "2: %s", dataItems[bufState[1]].text);
-    st7567_WriteString(7, 16 + 12, str, FontStyle_veranda_9);
-    sprintf(str, "3: %s", dataItems[bufState[2]].text);
-    st7567_WriteString(7, 16 + 24, str, FontStyle_veranda_9);
-    sprintf(str, "4: %s", dataItems[bufState[3]].text);
-    st7567_WriteString(7, 16 + 36, str, FontStyle_veranda_9);
-
-    st7567_WriteChar(0, 16 + 12 * selectRow, '>', FontStyle_veranda_9);
-}
-
-extern void powerHandlerOFF();
-void setupDispItemsButtonHandler()
-{
-    setButtonHandlerShort(0, setupDispItemsApplyButton);
-    setButtonHandlerLong(0, 0);
-    setButtonHandlerShort(1, setupDispItemsUpButton);
-    setButtonHandlerLong(1, setupDispItemsChangeUpButton);
-    setButtonHandlerShort(2, setupDispItemsDownButton);
-    setButtonHandlerLong(2, setupDispItemsChangeDownButton);
-    setButtonHandlerShort(3, setupDispItemsBackButton);
-    setButtonHandlerLong(3, powerHandlerOFF);
-}
-
-extern void settingsSetup();
-void setupDispItemsBackButton()
-{
-    settingsSetup();
-    selectRow = 1;
-    // updateDisp();
-}
-
-void setupDispItemsApplyButton()
-{
-    memcpy(currentDataItem, bufState, 4);
-    st7567_WriteString(110, 0, "wr", FontStyle_veranda_9);
-    // updateDisp();
-}
-
-void setupDispItemsUpButton()
-{
-    if (selectRow < 3)
-        selectRow++;
-    else
-        selectRow = 0;
-    // updateDisp();
-}
-
-void setupDispItemsChangeUpButton()
-{
-    if (bufState[selectRow] < NUM_DATA_ITEMS - 1)
-        bufState[selectRow]++;
-    else
-        bufState[selectRow] = 0;
-    // updateDisp();
-}
-
-void setupDispItemsDownButton()
-{
-    if (selectRow > 0)
-        selectRow--;
-    else
-        selectRow = 3;
-    // updateDisp();
-}
-
-void setupDispItemsChangeDownButton()
-{
-    if (bufState[selectRow] > 0)
-        bufState[selectRow]--;
-    else
-        bufState[selectRow] = NUM_DATA_ITEMS - 1;
-    // updateDisp();
 }

@@ -96,7 +96,8 @@
 			"display_task.h": "c",
 			"watchdog.h": "c",
 			"string.h": "c",
-			"irq.h": "c"
+			"irq.h": "c",
+			"stdio.h": "c"
 		},
 		"cortex-debug.variableUseNaturalFormat": true
 	}

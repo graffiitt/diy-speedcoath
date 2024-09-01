@@ -1,5 +1,7 @@
 #include "display_task/display_functions.h"
 
+extern SemaphoreHandle_t dispSem;
+
 void drawList(cvector(struct ItemObjectList) * items)
 {
     uint8_t x = 7;
@@ -31,7 +33,6 @@ void buttonUpList()
 {
     selectRow++;
     xTaskNotifyGive(taskDisplay);
-    //  updateDisp();
 }
 
 void buttonDownList()
@@ -39,5 +40,15 @@ void buttonDownList()
     if (selectRow > 0)
         selectRow--;
     xTaskNotifyGive(taskDisplay);
-    //  updateDisp();
+}
+
+void startChangeDisplay()
+{
+    xSemaphoreTake(dispSem, portMAX_DELAY);
+}
+
+void endChangeDisplay()
+{
+    xSemaphoreGive(dispSem);
+    xTaskNotifyGive(taskDisplay);
 }

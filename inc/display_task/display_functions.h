@@ -5,8 +5,10 @@
 #include "../button_handler/button.h"
 #include <string.h>
 #include "cvector.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 #define NUM_DISPLAY_ROWS 4
 #define NUM_DATA_ITEMS 6
@@ -17,13 +19,13 @@ extern void (*drawDiplay)();
 
 struct ItemObjectList
 {
-    char *text;
+    const char *text;
     void (*setupDisplay)(void);
 };
 
 struct ItemObjectData
 {
-    char *text; // for select current data item
+    const char *text; // for select current data item
     void (*drawItem)(const int, const int);
 };
 
@@ -31,5 +33,8 @@ void drawList(cvector(struct ItemObjectList) * items);
 
 void buttonUpList();
 void buttonDownList();
+
+void startChangeDisplay();
+void endChangeDisplay();
 
 #endif

@@ -1,7 +1,6 @@
 #include "battery.h"
 
-uint8_t chargeValue = 0;
-
+ 
 void start_adc()
 {
     adc_init();
@@ -12,10 +11,10 @@ void start_adc()
     adc_select_input(1);
 }
 
-void updateCharge()
+uint8_t getCharge()
 {
     uint16_t result = adc_read();
     const float voltage = 3.3f / (1 << 12) * result / 0.575f; // 0.6 -- divider volttage 750kom 500kom
 
-    chargeValue = (uint8_t)(((voltage - MIN_VOLTAGE) / DELTA_VOLTAGE) * 100);
+    return (uint8_t)(((voltage - MIN_VOLTAGE) / DELTA_VOLTAGE) * 100);
 }

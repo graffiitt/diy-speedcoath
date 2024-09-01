@@ -4,11 +4,5 @@
 #include "display_functions.h"
 
 void menuSetup();
-void menuButtonHandler();
-
-// button handlers
-void menuSelectButton();
-void menuOFFButton();
-void menuDisplayDraw();
 
 #endif

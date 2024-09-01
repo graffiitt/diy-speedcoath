@@ -1,4 +1,4 @@
-#include "display_task/settings_display.h"
+#include "display_task/display_functions.h"
 
 cvector(struct ItemObjectList) settingsItems = NULL;
 
@@ -6,33 +6,39 @@ char *settingsText[] = {
     "bluetooth connect",
     "items display"};
 
-extern void bleSettingsSetup();
-extern void setupDispItemsSetup();
-void settingsSetup()
-{
-    struct ItemObjectList str1 = {settingsText[0], bleSettingsSetup};
-    cvector_push_back(settingsItems, str1);
-    struct ItemObjectList str2 = {settingsText[1], setupDispItemsSetup};
-    cvector_push_back(settingsItems, str2);
+static void displayDraw();
+// button handlers
+static void selectButton();
+static void backButton();
 
-    settingsButtonHandler();
-    drawDiplay = &settingsDisplayDraw;
-}
-
-void settingsButtonHandler()
+static void buttonHandler()
 {
-    setButtonHandlerShort(0, settingsSelectButton);
+    setButtonHandlerShort(0, selectButton);
     setButtonHandlerLong(0, 0);
     setButtonHandlerShort(1, buttonUpList);
     setButtonHandlerLong(1, 0);
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
-    setButtonHandlerShort(3, settingsBackButton);
-    setButtonHandlerLong(3, settingsOFFButton);
+    setButtonHandlerShort(3, backButton);
 }
 
-void settingsSelectButton()
+void bleSettingsSetup();
+void setupDispItemsSetup();
+
+void settingsSetup()
 {
+    struct ItemObjectList str1 = {settingsText[0], 0};
+    cvector_push_back(settingsItems, str1);
+    struct ItemObjectList str2 = {settingsText[1], setupDispItemsSetup};
+    cvector_push_back(settingsItems, str2);
+
+    buttonHandler();
+    drawDiplay = &displayDraw;
+}
+
+void selectButton()
+{
+    startChangeDisplay();
     cvector_at(settingsItems, selectRow)->setupDisplay();
     for (int i = cvector_size(settingsItems); 0 < i; i--)
     {
@@ -40,32 +46,23 @@ void settingsSelectButton()
     }
 
     selectRow = 0;
-    //updateDisp();
+    endChangeDisplay();
 }
 
 extern void menuSetup();
-void settingsBackButton()
+void backButton()
 {
+    startChangeDisplay();
     for (int i = cvector_size(settingsItems); 0 < i; i--)
     {
         cvector_pop_back(settingsItems);
     }
     menuSetup();
     selectRow = 1;
-    // updateDisp();
+    endChangeDisplay();
 }
 
-extern void powerHandlerOFF();
-void settingsOFFButton()
-{
-    for (int i = cvector_size(settingsItems); 0 < i; i--)
-    {
-        cvector_pop_back(settingsItems);
-    }
-    powerHandlerOFF();
-}
-
-void settingsDisplayDraw()
+void displayDraw()
 {
     st7567_WriteString(0, 0, "settings", FontStyle_veranda_9);
     drawList(&settingsItems);
