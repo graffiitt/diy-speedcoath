@@ -1,32 +1,52 @@
 #include "display_task/ble_diplay.h"
 
-repeating_timer_t _bleTimer;
+#include "FreeRTOS.h"
+#include "task.h"
+
+static int32_t timeScanBegin;
+
 extern cvector(struct BLE_Item) bleItems;
 extern gc_state_t stateBLE;
 extern void (*handlerConnection)(void);
 
-void bleSettingsSetup()
+static void displayDraw();
+static void drawListBLE(cvector(struct BLE_Item) * items);
+// button handlers
+static void connectButton();
+static void updateDevices();
+static void backButton();
+
+static void handlerBle()
 {
-    // handlerConnection = &updateDisp;
-    bleSettingsButtonHandler();
-    drawDiplay = &bleSettingsDisplayDraw;
+    xTaskNotifyGive(taskDisplay);
 }
 
-void bleSettingsButtonHandler()
+static void buttonHandler()
 {
-    setButtonHandlerShort(0, bleSettingsUpdate);
-    setButtonHandlerLong(0, bleSettingsConnectButton);
+    setButtonHandlerShort(0, updateDevices);
+    setButtonHandlerLong(0, connectButton);
     setButtonHandlerShort(1, buttonUpList);
     setButtonHandlerLong(1, 0);
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
-    setButtonHandlerShort(3, bleSettingsBackButton);
+    setButtonHandlerShort(3, backButton);
 }
 
-void bleSettingsDisplayDraw()
+void bleSettingsSetup()
+{
+    handlerConnection = &handlerBle;
+    buttonHandler();
+    drawDiplay = &displayDraw;
+}
+
+void displayDraw()
 {
     if (stateBLE == TC_W4_SCAN_RESULT)
-        st7567_WriteString(0, 0, "bluetooth search dev", FontStyle_veranda_9);
+    {
+        st7567_WriteString(0, 0, "bluetooth search device", FontStyle_veranda_9);
+        if ((time_us_32() - timeScanBegin) > 5000000)
+            ble_scan_stop();
+    }
     else if (stateBLE == TC_CONNECTED)
         st7567_WriteString(0, 0, "bluetooth connected", FontStyle_veranda_9);
     else
@@ -56,7 +76,7 @@ void drawListBLE(cvector(struct BLE_Item) * items)
         int item = selectRow > (NUM_DISPLAY_ROWS - 1) ? (selectRow - NUM_DISPLAY_ROWS + 1) + i : i;
         if (item < cvector_size(*items))
         {
-            st7567_WriteString(x, y, cvector_at(*items, i)->name, FontStyle_veranda_9);
+            st7567_WriteString(x, y, cvector_at(*items, item)->name, FontStyle_veranda_9);
             y += 12;
         }
     }
@@ -64,51 +84,53 @@ void drawListBLE(cvector(struct BLE_Item) * items)
     st7567_WriteChar(0, y, '>', FontStyle_veranda_9);
 }
 
-void bleSettingsConnectButton()
+void connectButton()
 {
     if (stateBLE == TC_OFF)
     {
-        connectDevice(&cvector_at(bleItems, selectRow)->address, cvector_at(bleItems, selectRow)->addr_type);
+        connectDevice(cvector_at(bleItems, selectRow));
     }
     else if (stateBLE == TC_CONNECTED)
     {
-        printf("discon button\n");
         disconnectDevice();
     }
 }
 
 // update list devices
-void bleSettingsUpdate()
+void updateDevices()
 {
     if (stateBLE == TC_CONNECTED)
         return;
+
+    if (stateBLE == TC_W4_SCAN_RESULT)
+    {
+        ble_scan_stop();
+        ble_clearDevices();
+        ble_scan_start();
+        timeScanBegin = time_us_32();
+        xTaskNotifyGive(taskDisplay);
+        return;
+    }
+
     if (stateBLE != TC_W4_SCAN_RESULT)
     {
         ble_clearDevices();
         ble_scan_start();
-        add_repeating_timer_us(-5000000, bleScanTimer, NULL, &_bleTimer);
+        timeScanBegin = time_us_32();
+        xTaskNotifyGive(taskDisplay);
     }
-    // updateDisp();
 }
 
-bool bleScanTimer(repeating_timer_t *rt)
+void settingsSetup();
+void backButton()
 {
-    ble_scan_stop();
-    // updateDisp();
-    cancel_repeating_timer(&_bleTimer);
-    return true;
-}
-
-extern void settingsSetup();
-void bleSettingsBackButton()
-{
+    startChangeDisplay();
     if (stateBLE == TC_W4_SCAN_RESULT)
     {
         ble_scan_stop();
-        cancel_repeating_timer(&_bleTimer);
     }
     ble_clearDevices();
     settingsSetup();
     selectRow = 0;
-    // updateDisp();
+    endChangeDisplay();
 }

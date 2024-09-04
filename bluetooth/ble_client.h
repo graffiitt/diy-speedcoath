@@ -43,17 +43,7 @@ void ble_init();
 void ble_scan_start();
 void ble_scan_stop();
 void ble_clearDevices();
-void connectDevice(bd_addr_t *addr, bd_addr_type_t addr_type);
+void connectDevice(struct BLE_Item *dev);
 void disconnectDevice();
-// for scanning
-void pactet_handler_scanner(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
-
-// for get data from device
-void main_hci_event_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
-
-// private fnc
-static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
-void dump_advertisement_data(const uint8_t *adv_data, uint8_t adv_size, uint8_t *address, bd_addr_type_t addr_type);
-void device_add(uint8_t *address, char *name, int size_name, bd_addr_type_t addr_type);
 
 #endif

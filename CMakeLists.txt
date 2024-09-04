@@ -12,22 +12,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 pico_sdk_init()
 
 message("Adding ${PROJECT_NAME} C files: " )
-file(GLOB CPPFILE "src/display_task/*.c")
+file(GLOB CPPFILE "src/*/*.c")
 foreach(source ${CPPFILE})
     message("  - " ${source})
 endforeach(source)
  
-message("Adding ${PROJECT_NAME} H files: " )
-file(GLOB HFILE "src/display_task/*.h")
-foreach(source ${HFILE})
-    message("  - " ${source})
-endforeach(source)
+
  
 add_executable(${PROJECT_NAME}
 src/main.c
 src/battery.c
 ${CPPFILE}
-${HFILE}
 )
 
 set(CONFIG_PATH_FREERTOS ${CMAKE_CURRENT_LIST_DIR}/configs)
@@ -45,7 +40,6 @@ ble_tools
 hardware_adc
 hardware_rtc
 )
-
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 

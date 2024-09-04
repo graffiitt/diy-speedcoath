@@ -14,6 +14,12 @@ static uint8_t body_sensor_location;
 static gatt_client_notification_t notification_listener;
 static int listener_registered;
 
+static void pactet_handler_scanner(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
+static void handle_gatt_client_event(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
+static void main_hci_event_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
+static void dump_advertisement_data(const uint8_t *adv_data, uint8_t adv_size, uint8_t *address, bd_addr_type_t addr_type);
+static void device_add(uint8_t *address, char *name, int size_name, bd_addr_type_t addr_type);
+
 void (*handlerConnection)(void);
 
 void ble_init()
@@ -48,14 +54,14 @@ void ble_scan_stop()
     hci_remove_event_handler(&hci_event_callback_registration);
 }
 
-void connectDevice(bd_addr_t *addr, bd_addr_type_t addr_type)
+void connectDevice(struct BLE_Item *dev)
 {
     printf("connect to bt\n");
     stateBLE = TC_W4_CONNECT;
     hci_event_callback_registration.callback = &main_hci_event_handler;
     hci_add_event_handler(&hci_event_callback_registration);
 
-    gap_connect(*addr, addr_type);
+    gap_connect(dev->address, dev->addr_type);
 }
 
 void disconnectDevice()
@@ -135,9 +141,6 @@ void main_hci_event_handler(uint8_t packet_type, uint16_t channel, uint8_t *pack
         printf("Disconnected  ble\n");
         if (stateBLE == TC_OFF)
             break;
-        // gatt_heart_rate_client_start();
-        break;
-    default:
         break;
     }
 }
@@ -339,6 +342,9 @@ void device_add(uint8_t *address, char *name, int size_name, bd_addr_type_t addr
     it.addr_type = addr_type;
     bd_addr_copy(it.address, address);
     cvector_push_back(bleItems, it);
+
+    if (handlerConnection)
+        handlerConnection();
 }
 
 void ble_clearDevices()

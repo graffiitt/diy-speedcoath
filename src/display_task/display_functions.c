@@ -20,8 +20,7 @@ void drawList(cvector(struct ItemObjectList) * items)
         int item = selectRow > (NUM_DISPLAY_ROWS - 1) ? (selectRow - NUM_DISPLAY_ROWS + 1) + i : i;
         if (item < cvector_size(*items))
         {
-            // printf("st:%s\n", cvector_at(*items, i)->text);
-            st7567_WriteString(x, y, cvector_at(*items, i)->text, FontStyle_veranda_9);
+            st7567_WriteString(x, y, cvector_at(*items, item)->text, FontStyle_veranda_9);
             y += 12;
         }
     }
