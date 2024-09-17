@@ -9,6 +9,7 @@
 #include "display_task/display_task.h"
 #include "display_task/ble_diplay.h"
 #include "battery.h"
+#include "gps.h"
 
 // Priorities of our threads - higher numbers are higher priority
 #define DISPLAY_TASK_PRIORITY (tskIDLE_PRIORITY + 4UL)
@@ -19,12 +20,14 @@
 #define MAIN_TASK_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
 TaskHandle_t taskDisplay;
+TaskHandle_t taskMain;
+
 void xStartTasks()
 {
   buttonHandlerInit();
   xTaskCreate(display_task, "displayTask", DISPLAY_TASK_STACK_SIZE, NULL, DISPLAY_TASK_PRIORITY, &taskDisplay);
 
-  xTaskCreate(main_task, "bleTask", MAIN_TASK_TASK_STACK_SIZE, NULL, MAIN_TASK_TASK_PRIORITY, NULL);
+  xTaskCreate(main_task, "bleTask", MAIN_TASK_TASK_STACK_SIZE, NULL, MAIN_TASK_TASK_PRIORITY, &taskMain);
 }
 
 int main()
@@ -34,7 +37,7 @@ int main()
   st7567_Init();
   if (watchdog_caused_reboot())
   {
-    st7567_WriteString(0, 20, "WATCHDOG", FontStyle_veranda_18);
+    st7567_WriteString(0, 20, "WATCHDOG", FontStyle_veranda_18);\
     st7567_WriteString(0, 36, "REBOOT", FontStyle_veranda_18);
   }
   else
@@ -47,7 +50,7 @@ int main()
   sleep_ms(2000);
 
   start_adc();
-
+  gps_init();
   xStartTasks();
   vTaskStartScheduler();
   return 0;

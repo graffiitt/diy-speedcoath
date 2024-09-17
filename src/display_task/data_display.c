@@ -2,7 +2,10 @@
 #include "battery.h"
 
 extern struct Time timeGPS;
-
+extern uint8_t statusGPS;
+extern double speedGPS;
+extern double distanceGPS;
+extern struct BLE_data bleData;
 //     "pulse",
 //     "stroke count",
 //     "stroke rate"
@@ -13,16 +16,17 @@ const char *dataItemsText[] = {
     "pulse",
     "stroke count",
     "stroke rate",
-    "split 500m",
+    "split 500m", // speed
     "distance",
     "chrono"};
 
 uint8_t currentDataItem[] = {0, 1, 4, 3};
 struct ItemObjectData dataItems[NUM_DATA_ITEMS];
-struct DataDisplay dataDisp = {.distance = 0.00f};
 
 static void displayDraw();
 static void backButton();
+static void resetButton();
+
 static void drawPulseItem(const int x, const int y);
 static void drawStrokeCountItem(const int x, const int y);
 static void drawStroceRateItem(const int x, const int y);
@@ -32,7 +36,7 @@ static void drawChrono(const int x, const int y);
 
 static void buttonHandler()
 {
-    setButtonHandlerShort(0, 0);
+    setButtonHandlerShort(0, resetButton);
     setButtonHandlerLong(0, 0);
     setButtonHandlerShort(1, 0);
     setButtonHandlerLong(1, 0);
@@ -55,8 +59,8 @@ void displayDraw()
     sprintf(str, "%d%%", getCharge());
     st7567_WriteStringBack(127, 0, str, FontStyle_veranda_9);
 
-    // if (pos.status == 1)
-    //     st7567_WriteString(0, 0, "*", FontStyle_veranda_9);
+    if (statusGPS == 1)
+        st7567_WriteString(0, 0, "*", FontStyle_veranda_9);
 
     dataItems[currentDataItem[0]].drawItem(0, 11);
     dataItems[currentDataItem[1]].drawItem(64, 11);
@@ -95,17 +99,22 @@ void initDataDisp()
     // rtc_set_datetime(&timeStruct);
 }
 
+void resetButton()
+{
+    distanceGPS = 0;
+}
+
 void drawPulseItem(const int x, const int y)
 {
 
-    // if (dataDisp.ble->sensor_contact == 3)
-    // {
-    //     char str[5];
-    //     sprintf(str, "%03d", (int)dataDisp.ble->heart_rate);
-    //     st7567_WriteString(x, y + 4, str, FontStyle_veranda_26);
-    // }
-    // else
-        st7567_WriteString(x, y + 4, "---", FontStyle_veranda_18);
+    if (bleData.sensor_contact == 3)
+    {
+        char str[5];
+        sprintf(str, "%03d", (int)bleData.heart_rate);
+        st7567_WriteString(x, y + 4, str, FontStyle_veranda_26);
+    }
+    else
+        st7567_WriteString(x + 10, y + 4, "---", FontStyle_veranda_18);
 
     st7567_WriteString(x + 51, y + 15, "hr", FontStyle_veranda_9);
 }
@@ -130,10 +139,10 @@ void drawSplitItem(const int x, const int y)
 {
     char str[5];
     double min, sec;
-    // if (pos.speed > MINIMUM_SPEED)
-    //     sec = modf(30 / pos.speed, &min);
-    // else
-    //     sec = min = 0;
+    if (speedGPS > MINIMUM_SPEED)
+        sec = modf(30 / speedGPS, &min);
+    else
+        sec = min = 0;
     sprintf(str, "%02d:%02d", (int)min, (int)(sec * 60));
     st7567_WriteString(x + 4, y + 7, str, FontStyle_veranda_18);
 }
@@ -141,10 +150,7 @@ void drawSplitItem(const int x, const int y)
 void drawDistanse(const int x, const int y)
 {
     char str[6];
-    // if (pos.speed > MINIMUM_SPEED)
-        dataDisp.distance += calc_distance();
-    //  dataDisp.distance+=0.1;
-    sprintf(str, "%0.2f", dataDisp.distance);
+    sprintf(str, "%0.2f", distanceGPS);
     st7567_WriteStringBack(x + 60, y + 7, str, FontStyle_veranda_18);
 }
 
@@ -153,6 +159,6 @@ void drawChrono(const int x, const int y)
     char str[10];
     //  rtc_get_datetime(&timeStruct);
 
-    // sprintf(str, "%01d:%02d:%02d", timeStruct.hour, timeStruct.min, timeStruct.sec);
+    //  sprintf(str, "%01d:%02d:%02d", timeStruct.hour, timeStruct.min, timeStruct.sec);
     st7567_WriteString(x + 3, y + 9, str, FontStyle_veranda_9);
 }

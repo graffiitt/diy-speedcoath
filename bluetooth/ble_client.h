@@ -40,6 +40,8 @@ typedef enum
 static btstack_packet_callback_registration_t hci_event_callback_registration;
 
 void ble_init();
+void ble_off();
+void ble_on();
 void ble_scan_start();
 void ble_scan_stop();
 void ble_clearDevices();

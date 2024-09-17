@@ -21,7 +21,7 @@ static void buttonHandler()
     setButtonHandlerShort(2, buttonDownList);
     setButtonHandlerLong(2, 0);
     setButtonHandlerShort(3, 0);
-    setButtonHandlerLong(3, 0);
+
 }
 
 void menuSetup()

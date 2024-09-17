@@ -36,6 +36,13 @@ void ble_init()
     sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 }
 
+void ble_off()
+{
+    l2cap_deinit();
+    sm_deinit();
+    hci_power_control(HCI_POWER_OFF);
+}
+
 void ble_scan_start()
 {
     stateBLE = TC_W4_SCAN_RESULT;
@@ -44,6 +51,15 @@ void ble_scan_start()
 
     hci_event_callback_registration.callback = &pactet_handler_scanner;
     hci_add_event_handler(&hci_event_callback_registration);
+}
+
+void ble_on()
+{
+    hci_power_control(HCI_POWER_ON);
+    l2cap_init();
+    gatt_client_init();
+    sm_init();
+    sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
 }
 
 void ble_scan_stop()
@@ -68,8 +84,8 @@ void disconnectDevice()
 {
     gap_disconnect(connection_handle);
 
-    // hci_event_callback_registration.callback = &main_hci_event_handler;
-    // hci_remove_event_handler(&hci_event_callback_registration);
+    hci_event_callback_registration.callback = &main_hci_event_handler;
+    hci_remove_event_handler(&hci_event_callback_registration);
 }
 
 void pactet_handler_scanner(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size)

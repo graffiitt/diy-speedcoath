@@ -12,11 +12,10 @@
 
 #define MINIMUM_SPEED 0.01
 
-
 struct DataDisplay
 {
     double distance;
-    
+    uint8_t *statusGPS;
 };
 
 void dataDisplaySetup();
